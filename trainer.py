@@ -103,7 +103,7 @@ class Trainer:
                                 seed=self.seed, rand_split=args.rand_split, validation=args.validation)
 
         # for oracle
-        self.oracle_flag = args.oracle_flag
+      
         self.add_dim = 0
 
         # Prepare the self.learner (model)
@@ -119,7 +119,6 @@ class Trainer:
                         'optimizer': args.optimizer,
                         'gpuid': args.gpuid,
                         'memory': args.memory,
-                        'temp': args.temp,
                         'out_dim': num_classes,
                         'overwrite': args.overwrite == 1,
                         'DW': args.DW,
@@ -127,10 +126,16 @@ class Trainer:
                         'upper_bound_flag': args.upper_bound_flag,
                         'tasks': self.tasks_logits,
                         'top_k': self.top_k,
-                        'prompt_param':[self.num_tasks,args.prompt_param]
+                        'prompt_param':[self.num_tasks,args.prompt_param],
+                        't_model':args.t_model,
+                        's_model':args.s_model,
+                        'Soft_T': args.Soft_T,
+                        'kd_alpha': args.kd_alpha
                         }
         self.learner_type, self.learner_name = args.learner_type, args.learner_name
         self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)
+        
+
 
     def task_eval(self, t_index, local=False, task='acc'):
 
@@ -141,6 +146,7 @@ class Trainer:
         self.test_dataset.load_dataset(t_index, train=True)
         test_loader  = DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, drop_last=False, num_workers=self.workers)
         if local:
+          
             acc_avg,s_acc_avg=self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task)
             #s_acc_avg=self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=1, t_p_list_=t_p_list_)
             #return self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=0), self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=1)
@@ -186,13 +192,10 @@ class Trainer:
 
             # load dataset for task
             task = self.tasks_logits[i]  #[task_id*20:(task_id+1)*20]
-            if self.oracle_flag:
-                self.train_dataset.load_dataset(i, train=False)
-                self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)
-                self.add_dim += len(task)
-            else:
-                self.train_dataset.load_dataset(i, train=True)
-                self.add_dim = len(task)
+
+
+            self.train_dataset.load_dataset(i, train=True)
+            self.add_dim = len(task)
 
             # set task id for model (needed for prompting)
             

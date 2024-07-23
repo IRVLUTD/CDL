@@ -11,30 +11,10 @@ import copy
 from timm.models.layers import trunc_normal_
 
 
+import importlib
+timm_models = importlib.import_module('timm.models')
 
 
-
-# class CustomNetwork(nn.Module):
-#     def __init__(self, t_dim, s_dim):
-#         super(CustomNetwork, self).__init__()
-#         # Define the list of fully connected layers
-#         self.fc_layers = nn.ModuleList([
-#             nn.Linear(in_features, out_features) for in_features, out_features in [
-#                 (t_dim, s_dim),         # Layer 0
-#                 (t_dim, s_dim),         # Layer 1
-#                 (t_dim, s_dim),         # Layer 2
-#                 (t_dim, s_dim),         # Layer 3
-#                 (t_dim, s_dim)          # Layer 4
-#             ]
-#         ])
-       
-
-#     def forward(self, k, v , i):
-
-#         k = self.fc_layers[i](k)
-#         v = self.fc_layers[i](v)
-
-#         return k, v
 
 class DimensionalityReductionAttention(nn.Module):
     def __init__(self, feature_dim, reduced_dim):
@@ -68,29 +48,12 @@ class DimensionalityReductionAttention(nn.Module):
 class CustomNetwork(nn.Module):
     def __init__(self, t_dim, s_dim):
         super(CustomNetwork, self).__init__()
-        # Define the list of fully connected layers
-        # self.fc_layers = nn.ModuleList([
-        #     nn.Linear(in_features, out_features) for in_features, out_features in [
-        #         (t_dim, s_dim),         # Layer 0
-        #         (t_dim, s_dim),         # Layer 1
-        #         (t_dim, s_dim),         # Layer 2
-        #         (t_dim, s_dim),         # Layer 3
-        #         (t_dim, s_dim)          # Layer 4
-        #     ]
-        # ])
-       
-
-        # self.fc_layers = nn.ModuleList([
-        #     nn.Linear(t_dim, s_dim) for _ in range(5)
-        # ])
         self.attention_layers = nn.ModuleList([
             DimensionalityReductionAttention(t_dim, s_dim) for _ in range(5)
         ])
 
     def forward(self, k, v, i):
 
-        # k = self.fc_layers[i](k)
-        # v = self.fc_layers[i](v)
 
         k = self.attention_layers[i](k)
         v = self.attention_layers[i](v)
@@ -98,7 +61,7 @@ class CustomNetwork(nn.Module):
         return k, v
 
 
-# Our method!
+
 class CodaPrompt(nn.Module):
     def __init__(self, emb_d, n_tasks, prompt_param, key_dim):
         super().__init__()
@@ -308,7 +271,7 @@ def ortho_penalty(t):
 #   year={2022}
 # }
 class DualPrompt(nn.Module):
-    def __init__(self, emb_d, n_tasks, prompt_param, key_dim=192):
+    def __init__(self, emb_d, n_tasks, prompt_param, key_dim):
         super().__init__()
         self.task_count = 0
         self.emb_d = emb_d
@@ -423,7 +386,7 @@ class DualPrompt(nn.Module):
 #   year={2022}
 # }
 class L2P(DualPrompt):
-    def __init__(self, emb_d, n_tasks, prompt_param, key_dim=192):
+    def __init__(self, emb_d, n_tasks, prompt_param, key_dim):
         super().__init__(emb_d, n_tasks, prompt_param, key_dim)
 
     def _init_smart(self, emb_d, prompt_param):
@@ -455,14 +418,14 @@ def tensor_prompt(a, b, c=None, ortho=False):
     return p    
 
 class ViTZoo(nn.Module):
-    def __init__(self, num_classes=10, pt=False, prompt_flag=False, prompt_param=None, vit_model=None, t_or_s=None):
+    def __init__(self, num_classes=10, pt=False, prompt_flag=False, prompt_param=None, vit_model=None, shared_para=None, t_or_s=None):
         super(ViTZoo, self).__init__()
 
         # get last layer
-        self.last = nn.Linear(512, num_classes)
         self.prompt_flag = prompt_flag
         self.task_id = None
         self.t_or_s = t_or_s
+        self.shared_para = shared_para
 
         if vit_model == 'vit_base_patch16_224':
             embed_dim = 768
@@ -482,131 +445,81 @@ class ViTZoo(nn.Module):
             embed_dim = 1024
             depth = 24
             num_heads = 16
-        # get feature encoder
+       
+        #set knowledge distillation token
         if(t_or_s==1):
             self.kd_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
             trunc_normal_(self.kd_token, std=.02)
         else:
             self.kd_token = None
+
         if pt:
 
-            s_zoo_model = VisionTransformer(img_size=224, patch_size=16, embed_dim=192, depth=12,
-                                        num_heads=3, ckpt_layer=0,
+            
+
+            s_zoo_model = VisionTransformer(img_size=224, patch_size=16, embed_dim=self.shared_para['s_embed_dim'], depth=self.shared_para['s_depth'],
+                                        num_heads=self.shared_para['s_num_heads'], ckpt_layer=0,
                                         drop_path_rate=0
                                         )
             
-            from timm.models import vit_tiny_patch16_224
-            #from timm.models import vit_small_patch16_224
-            load_dict = vit_tiny_patch16_224(pretrained=True).state_dict()
-        
-            del load_dict['head.weight']; del load_dict['head.bias']
-            s_zoo_model.load_state_dict(load_dict,strict=True)
+            s_vit_model_function = getattr(timm_models, self.shared_para['s_vit_name'])
+            s_load_dict = s_vit_model_function(pretrained=True).state_dict()
 
-            print("Adding s_zoo+++++++++++++")
+            del s_load_dict['head.weight']; del s_load_dict['head.bias']
+            s_zoo_model.load_state_dict(s_load_dict,strict=True)
+
 
 
             zoo_model = VisionTransformer(img_size=224, patch_size=16, embed_dim=embed_dim, depth=depth,
                                         num_heads=num_heads, ckpt_layer=0,
                                         drop_path_rate=0, t_or_s=t_or_s
                                         )
-            if vit_model == 'vit_base_patch16_224':
-                from timm.models import vit_base_patch16_224
-                load_dict = vit_base_patch16_224(pretrained=True).state_dict()
-        
-                
-                del load_dict['head.weight']; del load_dict['head.bias']
-                zoo_model.load_state_dict(load_dict,strict=True)
             
-            elif vit_model == 'vit_small_patch16_224':
-                from timm.models import vit_small_patch16_224
-                load_dict = vit_small_patch16_224(pretrained=True).state_dict()
-        
-                del load_dict['head.weight']; del load_dict['head.bias']
-                zoo_model.load_state_dict(load_dict,strict=True)
+            vit_model_function = getattr(timm_models, vit_model)
+            load_dict = vit_model_function(pretrained=True).state_dict()
 
-            elif vit_model == 'vit_tiny_patch16_224':
-                from timm.models import vit_tiny_patch16_224
-                load_dict = vit_tiny_patch16_224(pretrained=True).state_dict()
+            del load_dict['head.weight']; del load_dict['head.bias']
+            zoo_model.load_state_dict(load_dict,strict=True)
 
-                del load_dict['head.weight']; del load_dict['head.bias']
-                zoo_model.load_state_dict(load_dict,strict=True)
-            
-            elif vit_model == 'vit_large_patch16_224':
-                from timm.models import vit_large_patch16_224
-                load_dict = vit_large_patch16_224(pretrained=True).state_dict()
-
-                del load_dict['head.weight']; del load_dict['head.bias']
-                zoo_model.load_state_dict(load_dict,strict=True)
-
+ 
+        #Adding the project_fc_layers for student model
 
         if(t_or_s==1):
-            # self.project_fc_0 = nn.Linear(768, 384)
-            # self.project_fc_1 = nn.Linear(768, 384)
-            # self.project_fc_2 = nn.Linear(768, 384)
-            # self.project_fc_3 = nn.Linear(768, 384)
-            # self.project_fc_4 = nn.Linear(768, 384)
-            # self.project_fc_layers = CustomNetwork(768, 384)
-
-            self.project_fc_layers = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], 768)
+  
+            self.project_fc_layers = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['t_embed_dim'])
             #self.project_fc_layers = CustomNetwork(768, 192)
 
 
-        # if(t_or_s==1):
-        #     pos_embed = zoo_model.pos_embed
-        #     new_pos_embed  = torch.cat([pos_embed[:, 0:1, :],pos_embed], dim=1)
-        #     zoo_model.pos_embed = nn.Parameter(new_pos_embed)
-
-            
 
 
         # classifier
         self.last = nn.Linear(embed_dim, num_classes)
         self.kd_last = nn.Linear(embed_dim, num_classes)
 
-        # create prompting module
+        # create prompting module, the teacher model used the prompt with same dimension of student model 
         if self.prompt_flag == 'l2p':
-            self.prompt = L2P(embed_dim, prompt_param[0], prompt_param[1])
+            self.prompt = L2P(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
         elif self.prompt_flag == 'dual':
-            self.prompt = DualPrompt(embed_dim, prompt_param[0], prompt_param[1])
+            self.prompt = DualPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
         elif self.prompt_flag == 'coda':
-           # self.prompt = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], embed_dim)
-            self.prompt = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], 192)
+            self.prompt = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
         else:
             self.prompt = None
         
-        # feature encoder changes if transformer vs resnet
+        # Set feature encoder
         self.feat = zoo_model
-
+        # Teacher model and student model share the query function
         self.s_feat = s_zoo_model
 
         
     # pen: get penultimate features    
     def forward(self, x, pen=False, train=False, t_p_list_=None, t_corr_list_=None):
 
-        # if self.prompt is not None:
-        #     with torch.no_grad():
-        #         q, _ = self.feat(x)
-        #         q = q[:,0,:]
-        #     out, prompt_loss = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id)
-        #     out = out[:,0,:]
-
-            
-            
-        # else:
-        #     out, _ = self.feat(x)
-        #     out = out[:,0,:]
-        # out = out.view(out.size(0), -1)
-        # if not pen:
-        #     out = self.last(out)
-        # if self.prompt is not None and train:
-        #     return out, prompt_loss
-        # else:
-        #     return out
 
         if self.prompt is not None:
             
+            #query function
             with torch.no_grad():
-                #q, _ = self.feat(x)
                 q, _ = self.s_feat(x)
                 q = q[:,0,:]
 
@@ -623,9 +536,6 @@ class ViTZoo(nn.Module):
             
             elif(self.t_or_s==1):
 
-                # t_p_all = torch.cat((t_p_list_[0],t_p_list_[1]), dim=1)
-                # print("&&&&&&&&&&&t_p_all_.shape:",t_p_all.shape)
-                # print("$$$$$$$$$$$$$$self.kd_token:",self.kd_token[0,0,:10])
                 out, prompt_loss, rm_loss_ = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, project_fc_layers=self.project_fc_layers, t_corr_list_=t_corr_list_)
                 
                 kd_out = out[:,0,:]
@@ -664,6 +574,6 @@ class ViTZoo(nn.Module):
 
   
             
-def vit_pt_imnet(out_dim, block_division = None, prompt_flag = 'None', prompt_param=None, vit_model=None, t_or_s=None):
-    return ViTZoo(num_classes=out_dim, pt=True, prompt_flag=prompt_flag, prompt_param=prompt_param, vit_model=vit_model, t_or_s=t_or_s)
+def vit_pt_imnet(out_dim, block_division = None, prompt_flag = 'None', prompt_param=None, vit_model=None, shared_para=None, t_or_s=None):
+    return ViTZoo(num_classes=out_dim, pt=True, prompt_flag=prompt_flag, prompt_param=prompt_param, vit_model=vit_model, shared_para=shared_para, t_or_s=t_or_s)
 
