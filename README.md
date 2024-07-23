@@ -24,17 +24,7 @@ We study the problem of Continual Distillation Learning (CDL) that considers Kno
  * Create a folder `data/`
  * **CIFAR 100**: should automatically be downloaded
  * **ImageNet-R**: retrieve from: https://github.com/hendrycks/imagenet-r
- Datasets with the following structure:
 
-    data
-        ├── cifar-100-python
-        │   └── meta
-        │   └── train
-        │   └── test
-        ├── imagenet-r
-        │   ├── ${class_id}
-        │   └── └── ${item_id}.jpg
-     
 ## Training
 All commands should be run under the project root directory. **The scripts are set up for 2 GPUs** but can be modified for your hardware.
 
