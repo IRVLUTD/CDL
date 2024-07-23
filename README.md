@@ -1,7 +1,7 @@
 ##  Continual Distillation Learning
 PyTorch code for the paper:\
 **Continual Distillation Learning**\
-**_[Qifan Zhang]_**, Yunhui Guo, Yu Xiang
+**Qifan Zhang, Yunhui Guo, Yu Xiang
 
 [arXiv](https://arxiv.org/abs/2407.13911), [Project](https://irvlutd.github.io/CDL/)
 
