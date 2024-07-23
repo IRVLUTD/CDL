@@ -23,7 +23,60 @@ class NormalNN(nn.Module):
         self.log = print
         self.config = learner_config
         self.out_dim = learner_config['out_dim']
-        self.model, self.s_model = self.create_model()
+        self.t_model_name = learner_config['t_model']
+        self.s_model_name = learner_config['s_model']
+
+        if self.s_model_name == 'vit_base_patch16_224':
+            s_embed_dim = 768
+            s_depth = 12
+            s_num_heads = 12
+
+        elif self.s_model_name == 'vit_small_patch16_224':
+            s_embed_dim = 384
+            s_depth = 12
+            s_num_heads = 6
+        elif self.s_model_name == 'vit_tiny_patch16_224':
+            s_embed_dim = 192
+            s_depth = 12
+            s_num_heads = 3
+
+        elif self.s_model_name == 'vit_large_patch16_224':
+            s_embed_dim = 1024
+            s_depth = 24
+            s_num_heads = 16
+
+
+        if self.t_model_name == 'vit_base_patch16_224':
+            t_embed_dim = 768
+            t_depth = 12
+            t_num_heads = 12
+
+        elif self.t_model_name == 'vit_small_patch16_224':
+            t_embed_dim = 384
+            t_depth = 12
+            t_num_heads = 6
+        elif self.t_model_name == 'vit_tiny_patch16_224':
+            t_embed_dim = 192
+            t_depth = 12
+            t_num_heads = 3
+
+        elif self.t_model_name == 'vit_large_patch16_224':
+            t_embed_dim = 1024
+            t_depth = 24
+            t_num_heads = 16
+       
+
+        self.shared_para = {'t_vit_name': self.t_model_name,
+                        't_embed_dim': t_embed_dim,
+                        't_depth': t_depth,
+                        't_num_heads': t_num_heads,
+                        's_vit_name': self.s_model_name,
+                        's_embed_dim': s_embed_dim,
+                        's_depth': s_depth,
+                        's_num_heads': s_num_heads,
+                        }
+
+        self.model, self.s_model = self.create_model(self.t_model_name,self.s_model_name,self.shared_para)
         self.reset_optimizer = True
         self.overwrite = learner_config['overwrite']
         self.batch_size = learner_config['batch_size']
@@ -62,7 +115,7 @@ class NormalNN(nn.Module):
         # initialize optimizer
         self.init_optimizer()
 
-    
+
 
     ##########################################
     #           MODEL TRAINING               #
@@ -116,15 +169,10 @@ class NormalNN(nn.Module):
                         y = y.cuda()
                     
                     # model update
-                    loss, output, ori_logits, p_list_, t_corr_list_= self.update_model(x, y, epoch, args)
-                 
-                    
+                    loss, output, cur_logits, p_list_, t_corr_list_= self.update_model(x, y, epoch)        
                     # pre_cls_logits = torch.softmax(output,dim=-1)
                     # predicts_ = torch.max(pre_cls_logits, dim=1)[1]
-
-
-
-                    s_loss, soft_loss, rm_loss_, s_output= self.s_update_model(x, y, ori_logits, p_list_, t_corr_list_, args)
+                    s_loss, soft_loss, rm_loss_, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_)
 
                     # measure elapsed time
                     batch_time.update(batch_timer.toc())  
@@ -222,7 +270,9 @@ class NormalNN(nn.Module):
                 output, p_list_ = model.forward(input)
                 output = output[:, :self.valid_out_dim]
                 s_output = s_model.forward(input, t_p_list_ = p_list_)[:, :self.valid_out_dim]
-         
+
+                # self.log(' * Target {target}, Task {task}'
+                #     .format(target=target, task=task))
                 acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
                 s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
             else:
@@ -334,13 +384,7 @@ class NormalNN(nn.Module):
 
   
 
-    # def create_model(self):
-    #     cfg = self.config
-
-    #     # Define the backbone (MLP, LeNet, VGG, ResNet ... etc) of model
-    #     model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](out_dim=self.out_dim)
-
-    #     return model
+ 
 
     def print_model(self):
         self.log(self.model)

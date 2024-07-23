@@ -30,18 +30,21 @@ def create_args():
     parser.add_argument('--overwrite', type=int, default=0, metavar='N', help='Train regardless of whether saved model exists')
 
     # CL Args          
-    parser.add_argument('--oracle_flag', default=False, action='store_true', help='Upper bound for oracle')
     parser.add_argument('--upper_bound_flag', default=False, action='store_true', help='Upper bound')
     parser.add_argument('--memory', type=int, default=0, help="size of memory for replay")
-    parser.add_argument('--temp', type=float, default=2., dest='temp', help="temperature for distillation")
     parser.add_argument('--DW', default=False, action='store_true', help='dataset balancing')
     parser.add_argument('--prompt_param', nargs="+", type=float, default=[1, 1, 1],
                          help="e prompt pool size, e prompt length, g prompt length")
     
     # The Teacher and Student Model
     
-    parser.add_argument('--t_model', default='vit_large_patch16_224', type=str, metavar='MODEL', help='Name of t_model to train')
-    parser.add_argument('--s_model', default='vit_base_patch16_224', type=str, metavar='MODEL', help='Name of s_model to train')
+    parser.add_argument('--t_model', default='vit_base_patch16_224', type=str, metavar='MODEL', help='Name of t_model to train')
+    parser.add_argument('--s_model', default='vit_tiny_patch16_224', type=str, metavar='MODEL', help='Name of s_model to train')
+    
+    # KD Args
+    parser.add_argument('--kd_alpha', type=float, default=0.5, help="alpha of distillation loss")
+    parser.add_argument('--Soft_T', type=float, default=2., help="temperature for distillation")
+    
 
     # Config Arg
     parser.add_argument('--config', type=str, default="configs/config.yaml",

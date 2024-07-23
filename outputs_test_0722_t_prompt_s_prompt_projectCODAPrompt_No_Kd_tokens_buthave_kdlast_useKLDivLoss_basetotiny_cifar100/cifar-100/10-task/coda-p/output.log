@@ -1,0 +1,99 @@
+************************************
+* STARTING TRIAL 1
+************************************
+Files already downloaded and verified
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 192
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 768
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 192
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 192
+!!!!!!!!!self.key_d: 192
+*****************************************
+*****************************************
+====================== 1 =======================
+Incremental class: Old valid output dimension: 0
+Incremental class: New Valid output dimension: 10
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/20
+ * Loss 0.540 | Train Acc 84.195
+ * Student_Loss 1.575 | Soft_Loss 0.849 | Rm_Loss 0.000 | Train Acc 54.788
+LR: 0.001
+Epoch:2/20
+ * Loss 0.226 | Train Acc 92.468
+ * Student_Loss 0.808 | Soft_Loss 0.523 | Rm_Loss 0.000 | Train Acc 82.632
+LR: 0.000996652423648492
+Epoch:3/20
+ * Loss 0.188 | Train Acc 93.710
+ * Student_Loss 0.644 | Soft_Loss 0.428 | Rm_Loss 0.000 | Train Acc 86.238
+LR: 0.000986632107128826
+Epoch:4/20
+ * Loss 0.178 | Train Acc 94.191
+ * Student_Loss 0.595 | Soft_Loss 0.393 | Rm_Loss 0.000 | Train Acc 87.079
+LR: 0.0009700061379902343
+Epoch:5/20
+ * Loss 0.163 | Train Acc 94.792
+ * Student_Loss 0.545 | Soft_Loss 0.370 | Rm_Loss 0.000 | Train Acc 88.662
+LR: 0.0009468858296349348
