@@ -1,6 +1,6 @@
 ##  Continual Distillation Learning
 PyTorch code for the paper:\
-**Continual Distillation Learning**\
+**Continual Distillation Learning**
 
 
 [arXiv](https://arxiv.org/abs/2407.13911), [Project](https://irvlutd.github.io/CDL/)
