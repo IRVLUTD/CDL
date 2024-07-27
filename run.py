@@ -141,7 +141,7 @@ if __name__ == '__main__':
         print('************************************')
 
         # set random seeds
-        seed = r + 11
+        seed = r + 2
         random.seed(seed)
         np.random.seed(seed)
         torch.manual_seed(seed)
@@ -168,9 +168,6 @@ if __name__ == '__main__':
         avg_metrics = trainer.train(avg_metrics, s_avg_metrics, args)  
 
 
-
-        # evaluate model
-        #avg_metrics = trainer.evaluate(avg_metrics)    
 
         # save results
         for mkey in metric_keys: 

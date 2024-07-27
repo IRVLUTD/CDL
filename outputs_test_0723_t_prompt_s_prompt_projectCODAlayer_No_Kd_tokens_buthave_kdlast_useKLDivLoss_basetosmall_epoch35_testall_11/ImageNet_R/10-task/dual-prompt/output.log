@@ -1,0 +1,118 @@
+************************************
+* STARTING TRIAL 1
+************************************
+n_tasks 10
+prompt_param: [10.0, 20.0, 6.0]
+!!!!!!!!!self.e_pool_size: 10
+!!!!!!!!!e_l: 20
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 10
+!!!!!!!!!e_l: 20
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 10
+!!!!!!!!!e_l: 20
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 10
+!!!!!!!!!e_l: 20
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 10
+!!!!!!!!!e_l: 20
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+*****************************************
+*****************************************
+====================== 1 =======================
+Incremental class: Old valid output dimension: 0
+Incremental class: New Valid output dimension: 20
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 93.267 | Train Acc 64.739
+ * Student_Loss 92.659 | Soft_Loss 0.477 | Rm_Loss 0.000 | Train Acc 46.875
+LR: 0.001
+Epoch:2/35
+ * Loss 86.512 | Train Acc 84.515
+ * Student_Loss 86.136 | Soft_Loss 0.401 | Rm_Loss 0.000 | Train Acc 77.705
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 80.198 | Train Acc 87.034
+ * Student_Loss 79.900 | Soft_Loss 0.386 | Rm_Loss 0.000 | Train Acc 81.343
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 73.578 | Train Acc 88.853
+ * Student_Loss 73.369 | Soft_Loss 0.379 | Rm_Loss 0.000 | Train Acc 82.743
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 66.570 | Train Acc 90.252
+ * Student_Loss 66.404 | Soft_Loss 0.373 | Rm_Loss 0.000 | Train Acc 83.675
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 59.147 | Train Acc 90.205
+ * Student_Loss 59.023 | Soft_Loss 0.370 | Rm_Loss 0.000 | Train Acc 85.494
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 51.306 | Train Acc 90.951
+ * Student_Loss 51.371 | Soft_Loss 0.365 | Rm_Loss 0.000 | Train Acc 86.147
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 43.197 | Train Acc 92.211
+ * Student_Loss 43.605 | Soft_Loss 0.374 | Rm_Loss 0.000 | Train Acc 87.780
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 35.184 | Train Acc 92.257
+ * Student_Loss 35.935 | Soft_Loss 0.370 | Rm_Loss 0.000 | Train Acc 87.873
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 27.627 | Train Acc 92.771
+ * Student_Loss 28.631 | Soft_Loss 0.366 | Rm_Loss 0.000 | Train Acc 88.806
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 21.061 | Train Acc 91.791
+ * Student_Loss 22.134 | Soft_Loss 0.372 | Rm_Loss 0.000 | Train Acc 88.666
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 15.697 | Train Acc 93.050
+ * Student_Loss 16.684 | Soft_Loss 0.373 | Rm_Loss 0.000 | Train Acc 89.552
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 11.672 | Train Acc 93.050
+ * Student_Loss 12.394 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 89.972
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 8.704 | Train Acc 94.263
+ * Student_Loss 9.131 | Soft_Loss 0.362 | Rm_Loss 0.000 | Train Acc 90.625
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 6.614 | Train Acc 93.004
+ * Student_Loss 6.736 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 90.345
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 5.051 | Train Acc 94.030
+ * Student_Loss 4.928 | Soft_Loss 0.354 | Rm_Loss 0.000 | Train Acc 90.951
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 3.915 | Train Acc 94.263
+ * Student_Loss 3.636 | Soft_Loss 0.353 | Rm_Loss 0.000 | Train Acc 90.858
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 3.076 | Train Acc 94.263
+ * Student_Loss 2.725 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 90.625
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 2.444 | Train Acc 94.216
+ * Student_Loss 2.076 | Soft_Loss 0.367 | Rm_Loss 0.000 | Train Acc 89.646
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 1.948 | Train Acc 94.216
+ * Student_Loss 1.575 | Soft_Loss 0.358 | Rm_Loss 0.000 | Train Acc 91.185
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 1.567 | Train Acc 94.729
+ * Student_Loss 1.222 | Soft_Loss 0.349 | Rm_Loss 0.000 | Train Acc 91.604
+LR: 0.0006099824679470568

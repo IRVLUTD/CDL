@@ -101,6 +101,9 @@ class Trainer:
         self.test_dataset  = Dataset(args.dataroot, train=False, tasks=self.tasks,
                                 download_flag=False, transform=test_transform, 
                                 seed=self.seed, rand_split=args.rand_split, validation=args.validation)
+        
+
+
 
         # for oracle
       
@@ -137,7 +140,7 @@ class Trainer:
         
 
 
-    def task_eval(self, t_index, local=False, task='acc'):
+    def task_eval(self, t_index, task='acc'):
 
         val_name = self.task_names[t_index]
         print('validation split name:', val_name)
@@ -145,29 +148,8 @@ class Trainer:
         # eval
         self.test_dataset.load_dataset(t_index, train=True)
         test_loader  = DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, drop_last=False, num_workers=self.workers)
-        if local:
-          
-            acc_avg,s_acc_avg=self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task)
-            #s_acc_avg=self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=1, t_p_list_=t_p_list_)
-            #return self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=0), self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=1)
-            return acc_avg, s_acc_avg
-        else:
-            acc_avg,s_acc_avg=self.learner.validation(test_loader, task_metric=task)
-            #s_acc_avg=self.learner.validation(test_loader, task_metric=task, t_or_s=1, t_p_list_=t_p_list_)
-            #return self.learner.validation(test_loader, task_metric=task, t_or_s=0), self.learner.validation(test_loader, task_metric=task, t_or_s=1)
-            return acc_avg, s_acc_avg
-    # def s_task_eval(self, t_index, local=False, task='acc'):
-
-    #     val_name = self.task_names[t_index]
-    #     print('Student validation split name:', val_name)
-        
-    #     # eval
-    #     self.test_dataset.load_dataset(t_index, train=True)
-    #     test_loader  = DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, drop_last=False, num_workers=self.workers)
-    #     if local:
-    #         return self.learner.validation(test_loader, task_in = self.tasks_logits[t_index], task_metric=task, t_or_s=1)
-    #     else:
-    #         return self.learner.validation(test_loader, task_metric=task, t_or_s=1)
+        acc_avg,s_acc_avg=self.learner.validation(test_loader, task_metric=task)
+        return acc_avg, s_acc_avg
 
     def train(self, avg_metrics, s_avg_metrics, args):
     
@@ -251,7 +233,6 @@ class Trainer:
             self.reset_cluster_labels = True
             for j in range(i+1):
                 t_eval, s_eval = self.task_eval(j)
-                #acc_table.append(self.task_eval(j))
                 acc_table.append(t_eval)
                 s_acc_table.append(s_eval)
             temp_table['acc'].append(np.mean(np.asarray(acc_table)))
@@ -296,66 +277,3 @@ class Trainer:
         # repack dictionary and return
         return {'global': avg_acc_all,'pt': avg_acc_pt,'pt-local': avg_acc_pt_local}
 
-    def evaluate(self, avg_metrics):
-
-        self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)
-
-        # store results
-        metric_table = {}
-        metric_table_local = {}
-        for mkey in self.metric_keys:
-            metric_table[mkey] = {}
-            metric_table_local[mkey] = {}
-            
-        for i in range(self.max_task):
-
-            # increment task id in prompting modules
-            if i > 0:
-                try:
-                    if self.learner.model.module.prompt is not None:
-                        self.learner.model.module.prompt.process_task_count()
-                except:
-                    if self.learner.model.prompt is not None:
-                        self.learner.model.prompt.process_task_count()
-
-
-                try:
-                    if self.learner.s_model.module.prompt is not None:
-                        self.learner.s_model.module.prompt.process_task_count()
-                except:
-                    if self.learner.s_model.prompt is not None:
-                        self.learner.s_model.prompt.process_task_count()
-
-            # load model
-            model_save_dir = self.model_top_dir + '/models/repeat-'+str(self.seed+1)+'/task-'+self.task_names[i]+'/'
-            self.learner.task_count = i 
-            self.learner.add_valid_output_dim(len(self.tasks_logits[i]))
-            self.learner.pre_steps()
-            self.learner.load_model(model_save_dir)
-
-            # set task id for model (needed for prompting)
-            try:
-                self.learner.model.module.task_id = i
-            except:
-                self.learner.model.task_id = i
-
-            try:
-                self.learner.s_model.module.task_id = i
-            except:
-                self.learner.s_model.task_id = i
-
-            # evaluate acc
-            metric_table['acc'][self.task_names[i]] = OrderedDict()
-            metric_table_local['acc'][self.task_names[i]] = OrderedDict()
-            self.reset_cluster_labels = True
-            for j in range(i+1):
-                val_name = self.task_names[j]
-                metric_table['acc'][val_name][self.task_names[i]] = self.task_eval(j)
-            for j in range(i+1):
-                val_name = self.task_names[j]
-                metric_table_local['acc'][val_name][self.task_names[i]] = self.task_eval(j, local=True)
-
-        # summarize metrics
-        avg_metrics['acc'] = self.summarize_acc(avg_metrics['acc'], metric_table['acc'],  metric_table_local['acc'])
-
-        return avg_metrics

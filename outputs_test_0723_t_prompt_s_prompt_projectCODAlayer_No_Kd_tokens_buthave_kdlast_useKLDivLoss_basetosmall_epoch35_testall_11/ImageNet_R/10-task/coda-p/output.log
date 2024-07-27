@@ -1,0 +1,1699 @@
+************************************
+* STARTING TRIAL 1
+************************************
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 768
+!!!!!!!!!self.key_d: 384
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 768
+n_tasks 10
+prompt_param: [100.0, 8.0, 0.0]
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 384
+!!!!!!!!!self.e_pool_size: 100
+!!!!!!!!!e_l: 8
+!!!!!!!!!emb_d: 384
+!!!!!!!!!self.key_d: 384
+*****************************************
+*****************************************
+====================== 1 =======================
+Incremental class: Old valid output dimension: 0
+Incremental class: New Valid output dimension: 20
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.291 | Train Acc 66.185
+ * Student_Loss 1.403 | Soft_Loss 0.503 | Rm_Loss 0.000 | Train Acc 49.953
+LR: 0.001
+Epoch:2/35
+ * Loss 0.478 | Train Acc 86.567
+ * Student_Loss 0.809 | Soft_Loss 0.434 | Rm_Loss 0.000 | Train Acc 80.457
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.372 | Train Acc 89.086
+ * Student_Loss 0.667 | Soft_Loss 0.385 | Rm_Loss 0.000 | Train Acc 84.748
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.321 | Train Acc 89.739
+ * Student_Loss 0.631 | Soft_Loss 0.388 | Rm_Loss 0.000 | Train Acc 85.728
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.267 | Train Acc 92.118
+ * Student_Loss 0.571 | Soft_Loss 0.371 | Rm_Loss 0.000 | Train Acc 88.479
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.259 | Train Acc 92.584
+ * Student_Loss 0.545 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 88.806
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.249 | Train Acc 92.817
+ * Student_Loss 0.562 | Soft_Loss 0.363 | Rm_Loss 0.000 | Train Acc 88.153
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.219 | Train Acc 93.657
+ * Student_Loss 0.557 | Soft_Loss 0.378 | Rm_Loss 0.000 | Train Acc 89.366
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.220 | Train Acc 93.750
+ * Student_Loss 0.536 | Soft_Loss 0.360 | Rm_Loss 0.000 | Train Acc 89.692
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.250 | Train Acc 93.097
+ * Student_Loss 0.550 | Soft_Loss 0.363 | Rm_Loss 0.000 | Train Acc 88.666
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.202 | Train Acc 94.170
+ * Student_Loss 0.515 | Soft_Loss 0.362 | Rm_Loss 0.000 | Train Acc 90.065
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.185 | Train Acc 94.590
+ * Student_Loss 0.512 | Soft_Loss 0.367 | Rm_Loss 0.000 | Train Acc 91.651
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.152 | Train Acc 95.942
+ * Student_Loss 0.484 | Soft_Loss 0.346 | Rm_Loss 0.000 | Train Acc 91.278
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.157 | Train Acc 95.569
+ * Student_Loss 0.476 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 92.397
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.171 | Train Acc 95.382
+ * Student_Loss 0.472 | Soft_Loss 0.342 | Rm_Loss 0.000 | Train Acc 92.024
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.154 | Train Acc 95.196
+ * Student_Loss 0.472 | Soft_Loss 0.338 | Rm_Loss 0.000 | Train Acc 91.884
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.191 | Train Acc 94.310
+ * Student_Loss 0.505 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 91.698
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.145 | Train Acc 95.896
+ * Student_Loss 0.480 | Soft_Loss 0.351 | Rm_Loss 0.000 | Train Acc 92.257
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.182 | Train Acc 94.823
+ * Student_Loss 0.482 | Soft_Loss 0.355 | Rm_Loss 0.000 | Train Acc 93.004
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.149 | Train Acc 95.849
+ * Student_Loss 0.465 | Soft_Loss 0.337 | Rm_Loss 0.000 | Train Acc 91.838
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.162 | Train Acc 95.336
+ * Student_Loss 0.472 | Soft_Loss 0.334 | Rm_Loss 0.000 | Train Acc 91.838
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.157 | Train Acc 95.103
+ * Student_Loss 0.462 | Soft_Loss 0.337 | Rm_Loss 0.000 | Train Acc 91.884
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.131 | Train Acc 96.595
+ * Student_Loss 0.440 | Soft_Loss 0.332 | Rm_Loss 0.000 | Train Acc 93.330
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.141 | Train Acc 95.989
+ * Student_Loss 0.446 | Soft_Loss 0.327 | Rm_Loss 0.000 | Train Acc 92.864
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.139 | Train Acc 95.802
+ * Student_Loss 0.444 | Soft_Loss 0.324 | Rm_Loss 0.000 | Train Acc 93.004
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.131 | Train Acc 96.362
+ * Student_Loss 0.426 | Soft_Loss 0.316 | Rm_Loss 0.000 | Train Acc 93.377
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.157 | Train Acc 95.522
+ * Student_Loss 0.404 | Soft_Loss 0.303 | Rm_Loss 0.000 | Train Acc 93.517
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.149 | Train Acc 95.289
+ * Student_Loss 0.438 | Soft_Loss 0.318 | Rm_Loss 0.000 | Train Acc 93.190
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.131 | Train Acc 95.989
+ * Student_Loss 0.444 | Soft_Loss 0.336 | Rm_Loss 0.000 | Train Acc 93.144
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.106 | Train Acc 96.968
+ * Student_Loss 0.410 | Soft_Loss 0.310 | Rm_Loss 0.000 | Train Acc 93.657
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.130 | Train Acc 96.269
+ * Student_Loss 0.405 | Soft_Loss 0.294 | Rm_Loss 0.000 | Train Acc 93.610
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.132 | Train Acc 96.175
+ * Student_Loss 0.433 | Soft_Loss 0.316 | Rm_Loss 0.000 | Train Acc 92.864
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.103 | Train Acc 97.341
+ * Student_Loss 0.394 | Soft_Loss 0.294 | Rm_Loss 0.000 | Train Acc 94.356
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.127 | Train Acc 96.175
+ * Student_Loss 0.407 | Soft_Loss 0.295 | Rm_Loss 0.000 | Train Acc 94.030
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.127 | Train Acc 96.688
+ * Student_Loss 0.410 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 93.657
+validation split name: 1
+ * Val Teacher Acc 94.291, Total time 4.65
+ * Val Student Acc 92.081, Total time 0.00
+====================== 2 =======================
+Incremental class: Old valid output dimension: 20
+Incremental class: New Valid output dimension: 40
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.305 | Train Acc 63.720
+ * Student_Loss 1.348 | Soft_Loss 0.552 | Rm_Loss 0.000 | Train Acc 54.459
+LR: 0.001
+Epoch:2/35
+ * Loss 0.558 | Train Acc 83.765
+ * Student_Loss 0.826 | Soft_Loss 0.433 | Rm_Loss 0.000 | Train Acc 77.896
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.471 | Train Acc 86.128
+ * Student_Loss 0.738 | Soft_Loss 0.412 | Rm_Loss 0.000 | Train Acc 81.517
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.414 | Train Acc 87.576
+ * Student_Loss 0.685 | Soft_Loss 0.397 | Rm_Loss 0.000 | Train Acc 83.880
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.361 | Train Acc 89.596
+ * Student_Loss 0.684 | Soft_Loss 0.417 | Rm_Loss 0.000 | Train Acc 84.718
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.364 | Train Acc 89.710
+ * Student_Loss 0.684 | Soft_Loss 0.426 | Rm_Loss 0.000 | Train Acc 84.604
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.333 | Train Acc 90.396
+ * Student_Loss 0.664 | Soft_Loss 0.412 | Rm_Loss 0.000 | Train Acc 85.175
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.301 | Train Acc 91.159
+ * Student_Loss 0.635 | Soft_Loss 0.414 | Rm_Loss 0.000 | Train Acc 87.005
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.294 | Train Acc 91.120
+ * Student_Loss 0.618 | Soft_Loss 0.402 | Rm_Loss 0.000 | Train Acc 86.585
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.281 | Train Acc 91.997
+ * Student_Loss 0.634 | Soft_Loss 0.417 | Rm_Loss 0.000 | Train Acc 86.776
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.287 | Train Acc 92.073
+ * Student_Loss 0.645 | Soft_Loss 0.431 | Rm_Loss 0.000 | Train Acc 87.500
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.257 | Train Acc 93.293
+ * Student_Loss 0.609 | Soft_Loss 0.412 | Rm_Loss 0.000 | Train Acc 88.300
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.238 | Train Acc 93.369
+ * Student_Loss 0.598 | Soft_Loss 0.405 | Rm_Loss 0.000 | Train Acc 88.110
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.259 | Train Acc 92.645
+ * Student_Loss 0.587 | Soft_Loss 0.402 | Rm_Loss 0.000 | Train Acc 88.796
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.264 | Train Acc 92.530
+ * Student_Loss 0.601 | Soft_Loss 0.411 | Rm_Loss 0.000 | Train Acc 88.643
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.212 | Train Acc 94.093
+ * Student_Loss 0.569 | Soft_Loss 0.404 | Rm_Loss 0.000 | Train Acc 89.558
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.224 | Train Acc 93.598
+ * Student_Loss 0.581 | Soft_Loss 0.397 | Rm_Loss 0.000 | Train Acc 88.796
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.223 | Train Acc 93.293
+ * Student_Loss 0.585 | Soft_Loss 0.404 | Rm_Loss 0.000 | Train Acc 88.681
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.256 | Train Acc 92.226
+ * Student_Loss 0.597 | Soft_Loss 0.408 | Rm_Loss 0.000 | Train Acc 88.186
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.248 | Train Acc 92.950
+ * Student_Loss 0.576 | Soft_Loss 0.393 | Rm_Loss 0.000 | Train Acc 88.910
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.192 | Train Acc 94.360
+ * Student_Loss 0.573 | Soft_Loss 0.405 | Rm_Loss 0.000 | Train Acc 90.320
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.224 | Train Acc 93.521
+ * Student_Loss 0.584 | Soft_Loss 0.406 | Rm_Loss 0.000 | Train Acc 89.291
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.192 | Train Acc 94.207
+ * Student_Loss 0.537 | Soft_Loss 0.384 | Rm_Loss 0.000 | Train Acc 90.777
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.227 | Train Acc 93.636
+ * Student_Loss 0.560 | Soft_Loss 0.387 | Rm_Loss 0.000 | Train Acc 89.710
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.195 | Train Acc 94.665
+ * Student_Loss 0.556 | Soft_Loss 0.391 | Rm_Loss 0.000 | Train Acc 90.434
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.203 | Train Acc 94.207
+ * Student_Loss 0.534 | Soft_Loss 0.378 | Rm_Loss 0.000 | Train Acc 90.549
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.188 | Train Acc 94.055
+ * Student_Loss 0.532 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 90.511
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.193 | Train Acc 94.665
+ * Student_Loss 0.543 | Soft_Loss 0.378 | Rm_Loss 0.000 | Train Acc 89.596
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.202 | Train Acc 94.245
+ * Student_Loss 0.544 | Soft_Loss 0.383 | Rm_Loss 0.000 | Train Acc 90.968
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.205 | Train Acc 93.941
+ * Student_Loss 0.540 | Soft_Loss 0.377 | Rm_Loss 0.000 | Train Acc 90.663
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.187 | Train Acc 94.360
+ * Student_Loss 0.513 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 91.616
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.190 | Train Acc 94.665
+ * Student_Loss 0.503 | Soft_Loss 0.361 | Rm_Loss 0.000 | Train Acc 91.502
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.177 | Train Acc 95.008
+ * Student_Loss 0.504 | Soft_Loss 0.356 | Rm_Loss 0.000 | Train Acc 91.425
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.192 | Train Acc 94.855
+ * Student_Loss 0.508 | Soft_Loss 0.359 | Rm_Loss 0.000 | Train Acc 90.777
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.146 | Train Acc 95.960
+ * Student_Loss 0.482 | Soft_Loss 0.347 | Rm_Loss 0.000 | Train Acc 91.959
+validation split name: 1
+ * Val Teacher Acc 91.713, Total time 4.65
+ * Val Student Acc 87.109, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 82.402, Total time 6.00
+ * Val Student Acc 80.028, Total time 0.00
+====================== 3 =======================
+Incremental class: Old valid output dimension: 40
+Incremental class: New Valid output dimension: 60
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.105 | Train Acc 70.995
+ * Student_Loss 1.334 | Soft_Loss 0.597 | Rm_Loss 0.000 | Train Acc 58.627
+LR: 0.001
+Epoch:2/35
+ * Loss 0.432 | Train Acc 88.116
+ * Student_Loss 0.725 | Soft_Loss 0.402 | Rm_Loss 0.000 | Train Acc 82.394
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.354 | Train Acc 90.053
+ * Student_Loss 0.635 | Soft_Loss 0.365 | Rm_Loss 0.000 | Train Acc 85.299
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.302 | Train Acc 91.637
+ * Student_Loss 0.630 | Soft_Loss 0.384 | Rm_Loss 0.000 | Train Acc 86.004
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.282 | Train Acc 91.769
+ * Student_Loss 0.585 | Soft_Loss 0.360 | Rm_Loss 0.000 | Train Acc 86.972
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.252 | Train Acc 92.914
+ * Student_Loss 0.546 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 89.525
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.241 | Train Acc 93.002
+ * Student_Loss 0.539 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 89.305
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.234 | Train Acc 93.178
+ * Student_Loss 0.539 | Soft_Loss 0.363 | Rm_Loss 0.000 | Train Acc 89.349
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.231 | Train Acc 93.354
+ * Student_Loss 0.535 | Soft_Loss 0.361 | Rm_Loss 0.000 | Train Acc 89.613
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.209 | Train Acc 93.882
+ * Student_Loss 0.514 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 89.965
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.199 | Train Acc 94.322
+ * Student_Loss 0.521 | Soft_Loss 0.358 | Rm_Loss 0.000 | Train Acc 90.229
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.186 | Train Acc 94.674
+ * Student_Loss 0.502 | Soft_Loss 0.351 | Rm_Loss 0.000 | Train Acc 90.669
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.217 | Train Acc 93.794
+ * Student_Loss 0.527 | Soft_Loss 0.354 | Rm_Loss 0.000 | Train Acc 89.745
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.186 | Train Acc 94.410
+ * Student_Loss 0.479 | Soft_Loss 0.335 | Rm_Loss 0.000 | Train Acc 91.197
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.198 | Train Acc 94.630
+ * Student_Loss 0.501 | Soft_Loss 0.350 | Rm_Loss 0.000 | Train Acc 90.845
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.169 | Train Acc 94.894
+ * Student_Loss 0.441 | Soft_Loss 0.316 | Rm_Loss 0.000 | Train Acc 92.474
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.155 | Train Acc 95.643
+ * Student_Loss 0.461 | Soft_Loss 0.330 | Rm_Loss 0.000 | Train Acc 91.813
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.192 | Train Acc 94.102
+ * Student_Loss 0.488 | Soft_Loss 0.336 | Rm_Loss 0.000 | Train Acc 91.065
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.167 | Train Acc 95.246
+ * Student_Loss 0.449 | Soft_Loss 0.317 | Rm_Loss 0.000 | Train Acc 92.033
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.184 | Train Acc 94.894
+ * Student_Loss 0.475 | Soft_Loss 0.335 | Rm_Loss 0.000 | Train Acc 91.681
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.156 | Train Acc 95.599
+ * Student_Loss 0.449 | Soft_Loss 0.322 | Rm_Loss 0.000 | Train Acc 92.033
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.171 | Train Acc 95.467
+ * Student_Loss 0.446 | Soft_Loss 0.311 | Rm_Loss 0.000 | Train Acc 92.386
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.184 | Train Acc 94.586
+ * Student_Loss 0.445 | Soft_Loss 0.317 | Rm_Loss 0.000 | Train Acc 92.121
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.154 | Train Acc 95.731
+ * Student_Loss 0.438 | Soft_Loss 0.316 | Rm_Loss 0.000 | Train Acc 92.430
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.132 | Train Acc 96.215
+ * Student_Loss 0.416 | Soft_Loss 0.304 | Rm_Loss 0.000 | Train Acc 93.442
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.149 | Train Acc 95.687
+ * Student_Loss 0.435 | Soft_Loss 0.309 | Rm_Loss 0.000 | Train Acc 92.474
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.161 | Train Acc 95.467
+ * Student_Loss 0.430 | Soft_Loss 0.309 | Rm_Loss 0.000 | Train Acc 92.694
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.147 | Train Acc 95.907
+ * Student_Loss 0.416 | Soft_Loss 0.299 | Rm_Loss 0.000 | Train Acc 92.870
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.158 | Train Acc 95.423
+ * Student_Loss 0.440 | Soft_Loss 0.315 | Rm_Loss 0.000 | Train Acc 92.210
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.150 | Train Acc 95.026
+ * Student_Loss 0.417 | Soft_Loss 0.303 | Rm_Loss 0.000 | Train Acc 93.134
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.127 | Train Acc 96.479
+ * Student_Loss 0.370 | Soft_Loss 0.271 | Rm_Loss 0.000 | Train Acc 93.706
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.137 | Train Acc 95.511
+ * Student_Loss 0.411 | Soft_Loss 0.299 | Rm_Loss 0.000 | Train Acc 93.222
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.129 | Train Acc 96.215
+ * Student_Loss 0.409 | Soft_Loss 0.296 | Rm_Loss 0.000 | Train Acc 93.310
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.132 | Train Acc 96.259
+ * Student_Loss 0.397 | Soft_Loss 0.282 | Rm_Loss 0.000 | Train Acc 93.222
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.129 | Train Acc 96.567
+ * Student_Loss 0.394 | Soft_Loss 0.288 | Rm_Loss 0.000 | Train Acc 93.794
+validation split name: 1
+ * Val Teacher Acc 90.424, Total time 4.70
+ * Val Student Acc 83.610, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 80.168, Total time 5.98
+ * Val Student Acc 76.955, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 86.076, Total time 4.97
+ * Val Student Acc 83.725, Total time 0.00
+====================== 4 =======================
+Incremental class: Old valid output dimension: 60
+Incremental class: New Valid output dimension: 80
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.325 | Train Acc 64.332
+ * Student_Loss 1.462 | Soft_Loss 0.579 | Rm_Loss 0.000 | Train Acc 51.580
+LR: 0.001
+Epoch:2/35
+ * Loss 0.623 | Train Acc 82.364
+ * Student_Loss 0.871 | Soft_Loss 0.436 | Rm_Loss 0.000 | Train Acc 76.185
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.497 | Train Acc 85.022
+ * Student_Loss 0.768 | Soft_Loss 0.410 | Rm_Loss 0.000 | Train Acc 79.095
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.414 | Train Acc 88.111
+ * Student_Loss 0.769 | Soft_Loss 0.446 | Rm_Loss 0.000 | Train Acc 80.891
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.414 | Train Acc 87.644
+ * Student_Loss 0.722 | Soft_Loss 0.426 | Rm_Loss 0.000 | Train Acc 82.651
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.360 | Train Acc 89.260
+ * Student_Loss 0.695 | Soft_Loss 0.418 | Rm_Loss 0.000 | Train Acc 83.621
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.362 | Train Acc 89.619
+ * Student_Loss 0.713 | Soft_Loss 0.439 | Rm_Loss 0.000 | Train Acc 83.657
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.314 | Train Acc 90.553
+ * Student_Loss 0.694 | Soft_Loss 0.449 | Rm_Loss 0.000 | Train Acc 85.453
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.340 | Train Acc 90.409
+ * Student_Loss 0.699 | Soft_Loss 0.452 | Rm_Loss 0.000 | Train Acc 84.914
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.308 | Train Acc 90.733
+ * Student_Loss 0.686 | Soft_Loss 0.448 | Rm_Loss 0.000 | Train Acc 86.099
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.319 | Train Acc 91.164
+ * Student_Loss 0.687 | Soft_Loss 0.447 | Rm_Loss 0.000 | Train Acc 85.237
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.312 | Train Acc 90.805
+ * Student_Loss 0.640 | Soft_Loss 0.419 | Rm_Loss 0.000 | Train Acc 86.746
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.265 | Train Acc 92.205
+ * Student_Loss 0.634 | Soft_Loss 0.430 | Rm_Loss 0.000 | Train Acc 87.536
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.266 | Train Acc 92.205
+ * Student_Loss 0.645 | Soft_Loss 0.430 | Rm_Loss 0.000 | Train Acc 86.710
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.291 | Train Acc 91.523
+ * Student_Loss 0.619 | Soft_Loss 0.415 | Rm_Loss 0.000 | Train Acc 87.644
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.279 | Train Acc 91.882
+ * Student_Loss 0.640 | Soft_Loss 0.434 | Rm_Loss 0.000 | Train Acc 87.751
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.276 | Train Acc 92.026
+ * Student_Loss 0.626 | Soft_Loss 0.419 | Rm_Loss 0.000 | Train Acc 88.111
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.261 | Train Acc 92.457
+ * Student_Loss 0.632 | Soft_Loss 0.428 | Rm_Loss 0.000 | Train Acc 88.326
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.260 | Train Acc 92.529
+ * Student_Loss 0.661 | Soft_Loss 0.447 | Rm_Loss 0.000 | Train Acc 87.356
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.270 | Train Acc 92.421
+ * Student_Loss 0.642 | Soft_Loss 0.430 | Rm_Loss 0.000 | Train Acc 86.925
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.252 | Train Acc 92.457
+ * Student_Loss 0.624 | Soft_Loss 0.436 | Rm_Loss 0.000 | Train Acc 88.434
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.241 | Train Acc 92.385
+ * Student_Loss 0.628 | Soft_Loss 0.431 | Rm_Loss 0.000 | Train Acc 87.859
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.253 | Train Acc 92.313
+ * Student_Loss 0.626 | Soft_Loss 0.425 | Rm_Loss 0.000 | Train Acc 87.787
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.225 | Train Acc 93.534
+ * Student_Loss 0.609 | Soft_Loss 0.418 | Rm_Loss 0.000 | Train Acc 88.578
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.231 | Train Acc 92.816
+ * Student_Loss 0.613 | Soft_Loss 0.435 | Rm_Loss 0.000 | Train Acc 89.871
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.206 | Train Acc 94.253
+ * Student_Loss 0.558 | Soft_Loss 0.397 | Rm_Loss 0.000 | Train Acc 90.338
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.206 | Train Acc 93.966
+ * Student_Loss 0.571 | Soft_Loss 0.403 | Rm_Loss 0.000 | Train Acc 90.948
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.194 | Train Acc 94.145
+ * Student_Loss 0.574 | Soft_Loss 0.402 | Rm_Loss 0.000 | Train Acc 89.943
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.215 | Train Acc 93.966
+ * Student_Loss 0.600 | Soft_Loss 0.415 | Rm_Loss 0.000 | Train Acc 88.578
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.223 | Train Acc 93.499
+ * Student_Loss 0.577 | Soft_Loss 0.397 | Rm_Loss 0.000 | Train Acc 89.440
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.206 | Train Acc 94.217
+ * Student_Loss 0.569 | Soft_Loss 0.396 | Rm_Loss 0.000 | Train Acc 89.332
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.216 | Train Acc 93.966
+ * Student_Loss 0.571 | Soft_Loss 0.393 | Rm_Loss 0.000 | Train Acc 89.440
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.202 | Train Acc 94.289
+ * Student_Loss 0.564 | Soft_Loss 0.387 | Rm_Loss 0.000 | Train Acc 89.440
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.177 | Train Acc 95.079
+ * Student_Loss 0.561 | Soft_Loss 0.398 | Rm_Loss 0.000 | Train Acc 89.978
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.196 | Train Acc 94.073
+ * Student_Loss 0.546 | Soft_Loss 0.378 | Rm_Loss 0.000 | Train Acc 89.368
+validation split name: 1
+ * Val Teacher Acc 89.134, Total time 4.64
+ * Val Student Acc 84.162, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 78.073, Total time 6.10
+ * Val Student Acc 75.140, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 84.087, Total time 4.94
+ * Val Student Acc 80.289, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 79.009, Total time 5.78
+ * Val Student Acc 75.364, Total time 0.00
+====================== 5 =======================
+Incremental class: Old valid output dimension: 80
+Incremental class: New Valid output dimension: 100
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.052 | Train Acc 71.505
+ * Student_Loss 1.269 | Soft_Loss 0.565 | Rm_Loss 0.000 | Train Acc 59.827
+LR: 0.001
+Epoch:2/35
+ * Loss 0.409 | Train Acc 87.993
+ * Student_Loss 0.665 | Soft_Loss 0.367 | Rm_Loss 0.000 | Train Acc 84.087
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.310 | Train Acc 90.789
+ * Student_Loss 0.556 | Soft_Loss 0.336 | Rm_Loss 0.000 | Train Acc 86.883
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.281 | Train Acc 92.105
+ * Student_Loss 0.525 | Soft_Loss 0.325 | Rm_Loss 0.000 | Train Acc 87.664
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.253 | Train Acc 92.188
+ * Student_Loss 0.503 | Soft_Loss 0.322 | Rm_Loss 0.000 | Train Acc 88.980
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.238 | Train Acc 92.969
+ * Student_Loss 0.478 | Soft_Loss 0.308 | Rm_Loss 0.000 | Train Acc 90.255
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.220 | Train Acc 93.462
+ * Student_Loss 0.474 | Soft_Loss 0.320 | Rm_Loss 0.000 | Train Acc 90.419
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.219 | Train Acc 93.791
+ * Student_Loss 0.470 | Soft_Loss 0.315 | Rm_Loss 0.000 | Train Acc 90.214
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.203 | Train Acc 94.161
+ * Student_Loss 0.461 | Soft_Loss 0.314 | Rm_Loss 0.000 | Train Acc 90.954
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.187 | Train Acc 94.408
+ * Student_Loss 0.428 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 91.694
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.201 | Train Acc 93.544
+ * Student_Loss 0.441 | Soft_Loss 0.297 | Rm_Loss 0.000 | Train Acc 91.201
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.185 | Train Acc 94.737
+ * Student_Loss 0.433 | Soft_Loss 0.296 | Rm_Loss 0.000 | Train Acc 91.612
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.187 | Train Acc 94.572
+ * Student_Loss 0.424 | Soft_Loss 0.291 | Rm_Loss 0.000 | Train Acc 91.900
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.175 | Train Acc 94.696
+ * Student_Loss 0.405 | Soft_Loss 0.280 | Rm_Loss 0.000 | Train Acc 92.681
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.158 | Train Acc 95.395
+ * Student_Loss 0.394 | Soft_Loss 0.276 | Rm_Loss 0.000 | Train Acc 93.257
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.155 | Train Acc 95.354
+ * Student_Loss 0.398 | Soft_Loss 0.280 | Rm_Loss 0.000 | Train Acc 92.434
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.180 | Train Acc 94.572
+ * Student_Loss 0.432 | Soft_Loss 0.295 | Rm_Loss 0.000 | Train Acc 91.324
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.167 | Train Acc 95.189
+ * Student_Loss 0.417 | Soft_Loss 0.299 | Rm_Loss 0.000 | Train Acc 93.421
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.158 | Train Acc 95.271
+ * Student_Loss 0.404 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 93.544
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.172 | Train Acc 95.148
+ * Student_Loss 0.393 | Soft_Loss 0.280 | Rm_Loss 0.000 | Train Acc 93.010
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.139 | Train Acc 95.806
+ * Student_Loss 0.368 | Soft_Loss 0.264 | Rm_Loss 0.000 | Train Acc 93.421
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.148 | Train Acc 95.436
+ * Student_Loss 0.382 | Soft_Loss 0.268 | Rm_Loss 0.000 | Train Acc 93.174
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.142 | Train Acc 95.970
+ * Student_Loss 0.392 | Soft_Loss 0.279 | Rm_Loss 0.000 | Train Acc 92.763
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.148 | Train Acc 95.600
+ * Student_Loss 0.376 | Soft_Loss 0.274 | Rm_Loss 0.000 | Train Acc 93.750
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.148 | Train Acc 95.271
+ * Student_Loss 0.381 | Soft_Loss 0.268 | Rm_Loss 0.000 | Train Acc 92.763
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.134 | Train Acc 96.094
+ * Student_Loss 0.358 | Soft_Loss 0.255 | Rm_Loss 0.000 | Train Acc 93.709
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.125 | Train Acc 96.464
+ * Student_Loss 0.357 | Soft_Loss 0.250 | Rm_Loss 0.000 | Train Acc 93.668
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.144 | Train Acc 95.806
+ * Student_Loss 0.370 | Soft_Loss 0.268 | Rm_Loss 0.000 | Train Acc 93.832
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.097 | Train Acc 97.122
+ * Student_Loss 0.341 | Soft_Loss 0.255 | Rm_Loss 0.000 | Train Acc 94.449
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.109 | Train Acc 97.122
+ * Student_Loss 0.346 | Soft_Loss 0.250 | Rm_Loss 0.000 | Train Acc 94.243
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.135 | Train Acc 95.929
+ * Student_Loss 0.373 | Soft_Loss 0.263 | Rm_Loss 0.000 | Train Acc 93.750
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.109 | Train Acc 96.834
+ * Student_Loss 0.347 | Soft_Loss 0.256 | Rm_Loss 0.000 | Train Acc 94.696
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.128 | Train Acc 96.258
+ * Student_Loss 0.332 | Soft_Loss 0.236 | Rm_Loss 0.000 | Train Acc 94.613
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.112 | Train Acc 96.752
+ * Student_Loss 0.350 | Soft_Loss 0.243 | Rm_Loss 0.000 | Train Acc 93.668
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.088 | Train Acc 97.697
+ * Student_Loss 0.310 | Soft_Loss 0.233 | Rm_Loss 0.000 | Train Acc 95.477
+validation split name: 1
+ * Val Teacher Acc 86.924, Total time 4.70
+ * Val Student Acc 79.374, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 76.117, Total time 6.02
+ * Val Student Acc 70.251, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 82.278, Total time 4.96
+ * Val Student Acc 76.673, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 77.114, Total time 5.74
+ * Val Student Acc 67.055, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 85.806, Total time 5.19
+ * Val Student Acc 85.645, Total time 0.00
+====================== 6 =======================
+Incremental class: Old valid output dimension: 100
+Incremental class: New Valid output dimension: 120
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.096 | Train Acc 68.902
+ * Student_Loss 1.335 | Soft_Loss 0.583 | Rm_Loss 0.000 | Train Acc 57.317
+LR: 0.001
+Epoch:2/35
+ * Loss 0.490 | Train Acc 85.175
+ * Student_Loss 0.758 | Soft_Loss 0.408 | Rm_Loss 0.000 | Train Acc 80.145
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.372 | Train Acc 89.215
+ * Student_Loss 0.665 | Soft_Loss 0.380 | Rm_Loss 0.000 | Train Acc 83.270
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.355 | Train Acc 89.482
+ * Student_Loss 0.626 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 85.442
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.284 | Train Acc 91.311
+ * Student_Loss 0.602 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 86.319
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.297 | Train Acc 91.730
+ * Student_Loss 0.606 | Soft_Loss 0.382 | Rm_Loss 0.000 | Train Acc 86.890
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.279 | Train Acc 91.616
+ * Student_Loss 0.584 | Soft_Loss 0.376 | Rm_Loss 0.000 | Train Acc 87.195
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.246 | Train Acc 92.912
+ * Student_Loss 0.581 | Soft_Loss 0.385 | Rm_Loss 0.000 | Train Acc 88.605
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.224 | Train Acc 93.331
+ * Student_Loss 0.549 | Soft_Loss 0.370 | Rm_Loss 0.000 | Train Acc 89.101
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.227 | Train Acc 93.483
+ * Student_Loss 0.552 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 89.291
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.222 | Train Acc 92.797
+ * Student_Loss 0.549 | Soft_Loss 0.372 | Rm_Loss 0.000 | Train Acc 88.758
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.223 | Train Acc 93.369
+ * Student_Loss 0.534 | Soft_Loss 0.367 | Rm_Loss 0.000 | Train Acc 89.672
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.203 | Train Acc 94.055
+ * Student_Loss 0.527 | Soft_Loss 0.368 | Rm_Loss 0.000 | Train Acc 90.473
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.210 | Train Acc 93.979
+ * Student_Loss 0.534 | Soft_Loss 0.372 | Rm_Loss 0.000 | Train Acc 89.558
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.206 | Train Acc 93.216
+ * Student_Loss 0.521 | Soft_Loss 0.364 | Rm_Loss 0.000 | Train Acc 90.701
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.210 | Train Acc 93.864
+ * Student_Loss 0.539 | Soft_Loss 0.379 | Rm_Loss 0.000 | Train Acc 90.053
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.166 | Train Acc 95.198
+ * Student_Loss 0.502 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 91.197
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.191 | Train Acc 94.665
+ * Student_Loss 0.517 | Soft_Loss 0.362 | Rm_Loss 0.000 | Train Acc 90.739
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.180 | Train Acc 94.550
+ * Student_Loss 0.480 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 91.768
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.191 | Train Acc 94.360
+ * Student_Loss 0.494 | Soft_Loss 0.358 | Rm_Loss 0.000 | Train Acc 91.692
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.157 | Train Acc 95.274
+ * Student_Loss 0.491 | Soft_Loss 0.352 | Rm_Loss 0.000 | Train Acc 91.845
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.191 | Train Acc 94.169
+ * Student_Loss 0.491 | Soft_Loss 0.350 | Rm_Loss 0.000 | Train Acc 91.006
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.176 | Train Acc 94.665
+ * Student_Loss 0.499 | Soft_Loss 0.353 | Rm_Loss 0.000 | Train Acc 90.777
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.178 | Train Acc 94.703
+ * Student_Loss 0.478 | Soft_Loss 0.342 | Rm_Loss 0.000 | Train Acc 91.578
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.172 | Train Acc 95.046
+ * Student_Loss 0.462 | Soft_Loss 0.335 | Rm_Loss 0.000 | Train Acc 92.226
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.148 | Train Acc 95.503
+ * Student_Loss 0.455 | Soft_Loss 0.338 | Rm_Loss 0.000 | Train Acc 92.683
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.144 | Train Acc 95.846
+ * Student_Loss 0.453 | Soft_Loss 0.333 | Rm_Loss 0.000 | Train Acc 92.950
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.158 | Train Acc 95.541
+ * Student_Loss 0.461 | Soft_Loss 0.341 | Rm_Loss 0.000 | Train Acc 93.178
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.138 | Train Acc 95.960
+ * Student_Loss 0.447 | Soft_Loss 0.329 | Rm_Loss 0.000 | Train Acc 92.035
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.172 | Train Acc 95.160
+ * Student_Loss 0.443 | Soft_Loss 0.319 | Rm_Loss 0.000 | Train Acc 92.416
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.136 | Train Acc 95.541
+ * Student_Loss 0.447 | Soft_Loss 0.331 | Rm_Loss 0.000 | Train Acc 92.988
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.146 | Train Acc 95.503
+ * Student_Loss 0.443 | Soft_Loss 0.324 | Rm_Loss 0.000 | Train Acc 92.340
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.132 | Train Acc 96.380
+ * Student_Loss 0.448 | Soft_Loss 0.322 | Rm_Loss 0.000 | Train Acc 92.378
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.150 | Train Acc 95.427
+ * Student_Loss 0.449 | Soft_Loss 0.318 | Rm_Loss 0.000 | Train Acc 92.073
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.152 | Train Acc 95.732
+ * Student_Loss 0.451 | Soft_Loss 0.315 | Rm_Loss 0.000 | Train Acc 91.387
+validation split name: 1
+ * Val Teacher Acc 85.083, Total time 4.65
+ * Val Student Acc 76.059, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 74.162, Total time 6.01
+ * Val Student Acc 69.832, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 80.470, Total time 4.91
+ * Val Student Acc 77.034, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 75.510, Total time 5.80
+ * Val Student Acc 67.638, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 84.194, Total time 5.32
+ * Val Student Acc 83.065, Total time 0.00
+validation split name: 6
+ * Val Teacher Acc 80.666, Total time 5.36
+ * Val Student Acc 73.693, Total time 0.00
+====================== 7 =======================
+Incremental class: Old valid output dimension: 120
+Incremental class: New Valid output dimension: 140
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.098 | Train Acc 70.154
+ * Student_Loss 1.380 | Soft_Loss 0.631 | Rm_Loss 0.000 | Train Acc 57.111
+LR: 0.001
+Epoch:2/35
+ * Loss 0.422 | Train Acc 87.183
+ * Student_Loss 0.717 | Soft_Loss 0.405 | Rm_Loss 0.000 | Train Acc 82.835
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.331 | Train Acc 89.991
+ * Student_Loss 0.612 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 85.281
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.285 | Train Acc 91.304
+ * Student_Loss 0.588 | Soft_Loss 0.369 | Rm_Loss 0.000 | Train Acc 86.775
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.275 | Train Acc 91.984
+ * Student_Loss 0.568 | Soft_Loss 0.367 | Rm_Loss 0.000 | Train Acc 87.500
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.224 | Train Acc 93.297
+ * Student_Loss 0.524 | Soft_Loss 0.352 | Rm_Loss 0.000 | Train Acc 88.949
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.229 | Train Acc 93.342
+ * Student_Loss 0.517 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 89.855
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.184 | Train Acc 94.520
+ * Student_Loss 0.469 | Soft_Loss 0.319 | Rm_Loss 0.000 | Train Acc 90.806
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.231 | Train Acc 93.841
+ * Student_Loss 0.503 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 90.353
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.188 | Train Acc 94.792
+ * Student_Loss 0.473 | Soft_Loss 0.336 | Rm_Loss 0.000 | Train Acc 91.893
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.207 | Train Acc 93.795
+ * Student_Loss 0.502 | Soft_Loss 0.345 | Rm_Loss 0.000 | Train Acc 90.399
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.179 | Train Acc 94.475
+ * Student_Loss 0.466 | Soft_Loss 0.327 | Rm_Loss 0.000 | Train Acc 91.486
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.178 | Train Acc 94.701
+ * Student_Loss 0.463 | Soft_Loss 0.320 | Rm_Loss 0.000 | Train Acc 91.938
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.182 | Train Acc 94.520
+ * Student_Loss 0.468 | Soft_Loss 0.329 | Rm_Loss 0.000 | Train Acc 91.621
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.178 | Train Acc 94.973
+ * Student_Loss 0.452 | Soft_Loss 0.319 | Rm_Loss 0.000 | Train Acc 92.437
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.149 | Train Acc 95.743
+ * Student_Loss 0.439 | Soft_Loss 0.321 | Rm_Loss 0.000 | Train Acc 93.161
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.140 | Train Acc 95.924
+ * Student_Loss 0.436 | Soft_Loss 0.311 | Rm_Loss 0.000 | Train Acc 92.844
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.153 | Train Acc 95.969
+ * Student_Loss 0.417 | Soft_Loss 0.297 | Rm_Loss 0.000 | Train Acc 92.844
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.160 | Train Acc 95.290
+ * Student_Loss 0.458 | Soft_Loss 0.321 | Rm_Loss 0.000 | Train Acc 91.576
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.174 | Train Acc 95.380
+ * Student_Loss 0.435 | Soft_Loss 0.312 | Rm_Loss 0.000 | Train Acc 92.708
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.147 | Train Acc 95.516
+ * Student_Loss 0.409 | Soft_Loss 0.300 | Rm_Loss 0.000 | Train Acc 93.524
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.146 | Train Acc 95.562
+ * Student_Loss 0.427 | Soft_Loss 0.316 | Rm_Loss 0.000 | Train Acc 92.980
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.156 | Train Acc 96.060
+ * Student_Loss 0.401 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 93.478
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.122 | Train Acc 96.694
+ * Student_Loss 0.389 | Soft_Loss 0.285 | Rm_Loss 0.000 | Train Acc 93.433
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.116 | Train Acc 96.830
+ * Student_Loss 0.386 | Soft_Loss 0.282 | Rm_Loss 0.000 | Train Acc 94.293
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.131 | Train Acc 96.467
+ * Student_Loss 0.396 | Soft_Loss 0.284 | Rm_Loss 0.000 | Train Acc 93.795
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.140 | Train Acc 95.924
+ * Student_Loss 0.389 | Soft_Loss 0.280 | Rm_Loss 0.000 | Train Acc 93.478
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.150 | Train Acc 95.380
+ * Student_Loss 0.395 | Soft_Loss 0.287 | Rm_Loss 0.000 | Train Acc 93.161
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.118 | Train Acc 96.603
+ * Student_Loss 0.381 | Soft_Loss 0.278 | Rm_Loss 0.000 | Train Acc 93.886
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.135 | Train Acc 96.014
+ * Student_Loss 0.384 | Soft_Loss 0.274 | Rm_Loss 0.000 | Train Acc 93.071
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.110 | Train Acc 96.603
+ * Student_Loss 0.364 | Soft_Loss 0.267 | Rm_Loss 0.000 | Train Acc 94.520
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.110 | Train Acc 96.558
+ * Student_Loss 0.383 | Soft_Loss 0.285 | Rm_Loss 0.000 | Train Acc 93.886
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.121 | Train Acc 96.286
+ * Student_Loss 0.347 | Soft_Loss 0.247 | Rm_Loss 0.000 | Train Acc 93.524
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.102 | Train Acc 97.056
+ * Student_Loss 0.364 | Soft_Loss 0.266 | Rm_Loss 0.000 | Train Acc 93.705
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.112 | Train Acc 96.513
+ * Student_Loss 0.353 | Soft_Loss 0.259 | Rm_Loss 0.000 | Train Acc 94.022
+validation split name: 1
+ * Val Teacher Acc 85.635, Total time 4.81
+ * Val Student Acc 74.586, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 73.603, Total time 6.01
+ * Val Student Acc 69.413, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 78.662, Total time 4.98
+ * Val Student Acc 70.886, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 73.615, Total time 5.81
+ * Val Student Acc 67.201, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 81.774, Total time 5.35
+ * Val Student Acc 79.677, Total time 0.00
+validation split name: 6
+ * Val Teacher Acc 79.556, Total time 5.34
+ * Val Student Acc 72.266, Total time 0.00
+validation split name: 7
+ * Val Teacher Acc 78.995, Total time 4.74
+ * Val Student Acc 75.943, Total time 0.00
+====================== 8 =======================
+Incremental class: Old valid output dimension: 140
+Incremental class: New Valid output dimension: 160
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.049 | Train Acc 71.598
+ * Student_Loss 1.293 | Soft_Loss 0.603 | Rm_Loss 0.000 | Train Acc 61.630
+LR: 0.001
+Epoch:2/35
+ * Loss 0.413 | Train Acc 88.528
+ * Student_Loss 0.688 | Soft_Loss 0.390 | Rm_Loss 0.000 | Train Acc 84.375
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.324 | Train Acc 90.941
+ * Student_Loss 0.596 | Soft_Loss 0.354 | Rm_Loss 0.000 | Train Acc 86.748
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.284 | Train Acc 92.049
+ * Student_Loss 0.576 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 87.540
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.236 | Train Acc 92.919
+ * Student_Loss 0.511 | Soft_Loss 0.329 | Rm_Loss 0.000 | Train Acc 89.082
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.219 | Train Acc 93.750
+ * Student_Loss 0.508 | Soft_Loss 0.334 | Rm_Loss 0.000 | Train Acc 90.071
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.220 | Train Acc 93.473
+ * Student_Loss 0.492 | Soft_Loss 0.328 | Rm_Loss 0.000 | Train Acc 90.348
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.211 | Train Acc 94.185
+ * Student_Loss 0.488 | Soft_Loss 0.328 | Rm_Loss 0.000 | Train Acc 90.111
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.180 | Train Acc 94.778
+ * Student_Loss 0.472 | Soft_Loss 0.329 | Rm_Loss 0.000 | Train Acc 91.456
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.182 | Train Acc 94.818
+ * Student_Loss 0.461 | Soft_Loss 0.317 | Rm_Loss 0.000 | Train Acc 91.772
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.182 | Train Acc 95.016
+ * Student_Loss 0.448 | Soft_Loss 0.317 | Rm_Loss 0.000 | Train Acc 92.326
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.205 | Train Acc 94.502
+ * Student_Loss 0.448 | Soft_Loss 0.312 | Rm_Loss 0.000 | Train Acc 92.168
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.174 | Train Acc 94.976
+ * Student_Loss 0.434 | Soft_Loss 0.307 | Rm_Loss 0.000 | Train Acc 92.247
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.159 | Train Acc 95.570
+ * Student_Loss 0.434 | Soft_Loss 0.305 | Rm_Loss 0.000 | Train Acc 92.682
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.173 | Train Acc 95.293
+ * Student_Loss 0.429 | Soft_Loss 0.308 | Rm_Loss 0.000 | Train Acc 93.078
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.140 | Train Acc 95.886
+ * Student_Loss 0.425 | Soft_Loss 0.307 | Rm_Loss 0.000 | Train Acc 93.473
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.153 | Train Acc 95.530
+ * Student_Loss 0.425 | Soft_Loss 0.302 | Rm_Loss 0.000 | Train Acc 92.722
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.138 | Train Acc 95.767
+ * Student_Loss 0.409 | Soft_Loss 0.298 | Rm_Loss 0.000 | Train Acc 93.631
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.156 | Train Acc 95.767
+ * Student_Loss 0.402 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 93.829
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.151 | Train Acc 95.609
+ * Student_Loss 0.406 | Soft_Loss 0.294 | Rm_Loss 0.000 | Train Acc 93.394
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.135 | Train Acc 96.282
+ * Student_Loss 0.390 | Soft_Loss 0.289 | Rm_Loss 0.000 | Train Acc 94.185
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.144 | Train Acc 95.609
+ * Student_Loss 0.411 | Soft_Loss 0.292 | Rm_Loss 0.000 | Train Acc 92.998
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.133 | Train Acc 96.163
+ * Student_Loss 0.361 | Soft_Loss 0.266 | Rm_Loss 0.000 | Train Acc 94.066
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.133 | Train Acc 96.163
+ * Student_Loss 0.373 | Soft_Loss 0.273 | Rm_Loss 0.000 | Train Acc 93.987
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.154 | Train Acc 95.688
+ * Student_Loss 0.404 | Soft_Loss 0.284 | Rm_Loss 0.000 | Train Acc 93.275
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.130 | Train Acc 96.123
+ * Student_Loss 0.369 | Soft_Loss 0.267 | Rm_Loss 0.000 | Train Acc 93.473
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.118 | Train Acc 96.282
+ * Student_Loss 0.367 | Soft_Loss 0.269 | Rm_Loss 0.000 | Train Acc 94.146
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.128 | Train Acc 96.282
+ * Student_Loss 0.383 | Soft_Loss 0.279 | Rm_Loss 0.000 | Train Acc 94.225
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.115 | Train Acc 96.875
+ * Student_Loss 0.331 | Soft_Loss 0.248 | Rm_Loss 0.000 | Train Acc 95.253
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.116 | Train Acc 96.796
+ * Student_Loss 0.365 | Soft_Loss 0.258 | Rm_Loss 0.000 | Train Acc 93.987
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.130 | Train Acc 96.203
+ * Student_Loss 0.353 | Soft_Loss 0.252 | Rm_Loss 0.000 | Train Acc 94.462
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.149 | Train Acc 95.965
+ * Student_Loss 0.385 | Soft_Loss 0.272 | Rm_Loss 0.000 | Train Acc 93.987
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.106 | Train Acc 96.717
+ * Student_Loss 0.344 | Soft_Loss 0.253 | Rm_Loss 0.000 | Train Acc 94.502
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.123 | Train Acc 96.677
+ * Student_Loss 0.354 | Soft_Loss 0.257 | Rm_Loss 0.000 | Train Acc 94.660
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.128 | Train Acc 96.519
+ * Student_Loss 0.355 | Soft_Loss 0.261 | Rm_Loss 0.000 | Train Acc 94.541
+validation split name: 1
+ * Val Teacher Acc 83.241, Total time 4.70
+ * Val Student Acc 73.112, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 74.022, Total time 6.07
+ * Val Student Acc 65.503, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 77.758, Total time 5.05
+ * Val Student Acc 71.609, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 73.032, Total time 5.94
+ * Val Student Acc 65.306, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 80.161, Total time 5.32
+ * Val Student Acc 80.000, Total time 0.00
+validation split name: 6
+ * Val Teacher Acc 78.288, Total time 5.43
+ * Val Student Acc 70.206, Total time 0.00
+validation split name: 7
+ * Val Teacher Acc 78.097, Total time 4.87
+ * Val Student Acc 72.711, Total time 0.00
+validation split name: 8
+ * Val Teacher Acc 75.629, Total time 5.33
+ * Val Student Acc 75.314, Total time 0.00
+====================== 9 =======================
+Incremental class: Old valid output dimension: 160
+Incremental class: New Valid output dimension: 180
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.221 | Train Acc 66.176
+ * Student_Loss 1.412 | Soft_Loss 0.608 | Rm_Loss 0.000 | Train Acc 53.033
+LR: 0.001
+Epoch:2/35
+ * Loss 0.452 | Train Acc 87.592
+ * Student_Loss 0.737 | Soft_Loss 0.409 | Rm_Loss 0.000 | Train Acc 82.307
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.416 | Train Acc 87.546
+ * Student_Loss 0.668 | Soft_Loss 0.385 | Rm_Loss 0.000 | Train Acc 83.594
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.306 | Train Acc 91.544
+ * Student_Loss 0.603 | Soft_Loss 0.360 | Rm_Loss 0.000 | Train Acc 86.351
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.312 | Train Acc 90.717
+ * Student_Loss 0.614 | Soft_Loss 0.374 | Rm_Loss 0.000 | Train Acc 85.662
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.247 | Train Acc 92.647
+ * Student_Loss 0.577 | Soft_Loss 0.370 | Rm_Loss 0.000 | Train Acc 87.822
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.263 | Train Acc 92.417
+ * Student_Loss 0.546 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 88.971
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.237 | Train Acc 92.693
+ * Student_Loss 0.563 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 88.649
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.228 | Train Acc 93.428
+ * Student_Loss 0.567 | Soft_Loss 0.375 | Rm_Loss 0.000 | Train Acc 88.511
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.215 | Train Acc 93.842
+ * Student_Loss 0.514 | Soft_Loss 0.352 | Rm_Loss 0.000 | Train Acc 90.441
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.225 | Train Acc 93.704
+ * Student_Loss 0.525 | Soft_Loss 0.353 | Rm_Loss 0.000 | Train Acc 89.200
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.193 | Train Acc 94.301
+ * Student_Loss 0.502 | Soft_Loss 0.344 | Rm_Loss 0.000 | Train Acc 90.625
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.198 | Train Acc 94.164
+ * Student_Loss 0.524 | Soft_Loss 0.357 | Rm_Loss 0.000 | Train Acc 90.441
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.196 | Train Acc 93.934
+ * Student_Loss 0.483 | Soft_Loss 0.342 | Rm_Loss 0.000 | Train Acc 91.085
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.196 | Train Acc 94.210
+ * Student_Loss 0.498 | Soft_Loss 0.352 | Rm_Loss 0.000 | Train Acc 91.268
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.189 | Train Acc 94.669
+ * Student_Loss 0.475 | Soft_Loss 0.326 | Rm_Loss 0.000 | Train Acc 91.131
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.188 | Train Acc 94.485
+ * Student_Loss 0.460 | Soft_Loss 0.330 | Rm_Loss 0.000 | Train Acc 92.050
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.181 | Train Acc 94.807
+ * Student_Loss 0.480 | Soft_Loss 0.341 | Rm_Loss 0.000 | Train Acc 91.958
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.177 | Train Acc 94.715
+ * Student_Loss 0.485 | Soft_Loss 0.344 | Rm_Loss 0.000 | Train Acc 92.004
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.185 | Train Acc 94.164
+ * Student_Loss 0.486 | Soft_Loss 0.340 | Rm_Loss 0.000 | Train Acc 91.728
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.186 | Train Acc 94.899
+ * Student_Loss 0.450 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 92.325
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.158 | Train Acc 95.267
+ * Student_Loss 0.450 | Soft_Loss 0.332 | Rm_Loss 0.000 | Train Acc 93.336
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.166 | Train Acc 95.267
+ * Student_Loss 0.452 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 92.555
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.164 | Train Acc 95.496
+ * Student_Loss 0.420 | Soft_Loss 0.305 | Rm_Loss 0.000 | Train Acc 93.153
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.137 | Train Acc 96.691
+ * Student_Loss 0.428 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 93.612
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.138 | Train Acc 96.002
+ * Student_Loss 0.439 | Soft_Loss 0.321 | Rm_Loss 0.000 | Train Acc 92.923
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.148 | Train Acc 95.496
+ * Student_Loss 0.418 | Soft_Loss 0.301 | Rm_Loss 0.000 | Train Acc 92.831
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.144 | Train Acc 95.726
+ * Student_Loss 0.417 | Soft_Loss 0.308 | Rm_Loss 0.000 | Train Acc 93.290
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.120 | Train Acc 96.553
+ * Student_Loss 0.411 | Soft_Loss 0.301 | Rm_Loss 0.000 | Train Acc 93.520
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.124 | Train Acc 96.507
+ * Student_Loss 0.423 | Soft_Loss 0.306 | Rm_Loss 0.000 | Train Acc 92.785
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.132 | Train Acc 96.415
+ * Student_Loss 0.417 | Soft_Loss 0.307 | Rm_Loss 0.000 | Train Acc 93.704
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.130 | Train Acc 95.910
+ * Student_Loss 0.405 | Soft_Loss 0.298 | Rm_Loss 0.000 | Train Acc 93.566
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.131 | Train Acc 95.956
+ * Student_Loss 0.414 | Soft_Loss 0.297 | Rm_Loss 0.000 | Train Acc 93.061
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.124 | Train Acc 96.553
+ * Student_Loss 0.387 | Soft_Loss 0.281 | Rm_Loss 0.000 | Train Acc 93.704
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.142 | Train Acc 96.186
+ * Student_Loss 0.416 | Soft_Loss 0.300 | Rm_Loss 0.000 | Train Acc 93.015
+validation split name: 1
+ * Val Teacher Acc 83.425, Total time 4.75
+ * Val Student Acc 73.112, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 74.302, Total time 6.04
+ * Val Student Acc 63.128, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 79.566, Total time 4.89
+ * Val Student Acc 68.535, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 72.741, Total time 5.79
+ * Val Student Acc 62.974, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 80.323, Total time 5.32
+ * Val Student Acc 76.774, Total time 0.00
+validation split name: 6
+ * Val Teacher Acc 77.021, Total time 5.38
+ * Val Student Acc 68.146, Total time 0.00
+validation split name: 7
+ * Val Teacher Acc 76.481, Total time 4.88
+ * Val Student Acc 70.557, Total time 0.00
+validation split name: 8
+ * Val Teacher Acc 74.057, Total time 5.36
+ * Val Student Acc 72.799, Total time 0.00
+validation split name: 9
+ * Val Teacher Acc 76.491, Total time 5.11
+ * Val Student Acc 68.143, Total time 0.00
+====================== 10 =======================
+Incremental class: Old valid output dimension: 180
+Incremental class: New Valid output dimension: 200
+Optimizer is reset!
+*****************************************
+*****************************************
+LR: 0.001
+Epoch:1/35
+ * Loss 1.200 | Train Acc 68.066
+ * Student_Loss 1.366 | Soft_Loss 0.599 | Rm_Loss 0.000 | Train Acc 55.322
+LR: 0.001
+Epoch:2/35
+ * Loss 0.475 | Train Acc 85.693
+ * Student_Loss 0.736 | Soft_Loss 0.391 | Rm_Loss 0.000 | Train Acc 80.713
+LR: 0.0009989542049019889
+Epoch:3/35
+ * Loss 0.381 | Train Acc 89.209
+ * Student_Loss 0.635 | Soft_Loss 0.358 | Rm_Loss 0.000 | Train Acc 84.570
+LR: 0.0009958190069827293
+Epoch:4/35
+ * Loss 0.339 | Train Acc 90.186
+ * Student_Loss 0.586 | Soft_Loss 0.348 | Rm_Loss 0.000 | Train Acc 85.791
+LR: 0.0009906009637914517
+Epoch:5/35
+ * Loss 0.314 | Train Acc 91.162
+ * Student_Loss 0.581 | Soft_Loss 0.350 | Rm_Loss 0.000 | Train Acc 86.865
+LR: 0.0009833109893361378
+Epoch:6/35
+ * Loss 0.259 | Train Acc 92.188
+ * Student_Loss 0.539 | Soft_Loss 0.340 | Rm_Loss 0.000 | Train Acc 87.646
+LR: 0.0009739643312558872
+Epoch:7/35
+ * Loss 0.242 | Train Acc 92.627
+ * Student_Loss 0.516 | Soft_Loss 0.331 | Rm_Loss 0.000 | Train Acc 88.867
+LR: 0.0009625805389291063
+Epoch:8/35
+ * Loss 0.253 | Train Acc 91.895
+ * Student_Loss 0.517 | Soft_Loss 0.342 | Rm_Loss 0.000 | Train Acc 89.258
+LR: 0.0009491834225842194
+Epoch:9/35
+ * Loss 0.232 | Train Acc 92.871
+ * Student_Loss 0.505 | Soft_Loss 0.339 | Rm_Loss 0.000 | Train Acc 90.332
+LR: 0.0009338010034984283
+Epoch:10/35
+ * Loss 0.231 | Train Acc 93.604
+ * Student_Loss 0.501 | Soft_Loss 0.335 | Rm_Loss 0.000 | Train Acc 89.746
+LR: 0.000916465455388684
+Epoch:11/35
+ * Loss 0.224 | Train Acc 93.457
+ * Student_Loss 0.495 | Soft_Loss 0.327 | Rm_Loss 0.000 | Train Acc 90.039
+LR: 0.0008972130371174554
+Epoch:12/35
+ * Loss 0.216 | Train Acc 93.604
+ * Student_Loss 0.505 | Soft_Loss 0.340 | Rm_Loss 0.000 | Train Acc 90.723
+LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.210 | Train Acc 93.311
+ * Student_Loss 0.460 | Soft_Loss 0.314 | Rm_Loss 0.000 | Train Acc 91.064
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.197 | Train Acc 94.287
+ * Student_Loss 0.463 | Soft_Loss 0.321 | Rm_Loss 0.000 | Train Acc 91.162
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.199 | Train Acc 94.043
+ * Student_Loss 0.470 | Soft_Loss 0.320 | Rm_Loss 0.000 | Train Acc 91.309
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.187 | Train Acc 94.580
+ * Student_Loss 0.453 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 92.188
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.182 | Train Acc 94.336
+ * Student_Loss 0.475 | Soft_Loss 0.333 | Rm_Loss 0.000 | Train Acc 91.602
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.165 | Train Acc 94.922
+ * Student_Loss 0.455 | Soft_Loss 0.319 | Rm_Loss 0.000 | Train Acc 91.553
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.196 | Train Acc 94.043
+ * Student_Loss 0.468 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 91.602
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.184 | Train Acc 93.848
+ * Student_Loss 0.441 | Soft_Loss 0.310 | Rm_Loss 0.000 | Train Acc 92.285
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.175 | Train Acc 94.336
+ * Student_Loss 0.448 | Soft_Loss 0.321 | Rm_Loss 0.000 | Train Acc 91.943
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.162 | Train Acc 95.020
+ * Student_Loss 0.415 | Soft_Loss 0.295 | Rm_Loss 0.000 | Train Acc 92.676
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.170 | Train Acc 94.287
+ * Student_Loss 0.430 | Soft_Loss 0.304 | Rm_Loss 0.000 | Train Acc 92.334
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.167 | Train Acc 94.873
+ * Student_Loss 0.430 | Soft_Loss 0.303 | Rm_Loss 0.000 | Train Acc 92.676
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.172 | Train Acc 94.531
+ * Student_Loss 0.436 | Soft_Loss 0.308 | Rm_Loss 0.000 | Train Acc 92.432
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.138 | Train Acc 96.045
+ * Student_Loss 0.402 | Soft_Loss 0.294 | Rm_Loss 0.000 | Train Acc 93.848
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.150 | Train Acc 95.459
+ * Student_Loss 0.396 | Soft_Loss 0.296 | Rm_Loss 0.000 | Train Acc 93.604
+LR: 0.0003724161660501829
+Epoch:28/35
+ * Loss 0.148 | Train Acc 95.801
+ * Student_Loss 0.417 | Soft_Loss 0.293 | Rm_Loss 0.000 | Train Acc 92.773
+LR: 0.00032959371727931807
+Epoch:29/35
+ * Loss 0.141 | Train Acc 95.850
+ * Student_Loss 0.394 | Soft_Loss 0.283 | Rm_Loss 0.000 | Train Acc 93.066
+LR: 0.00028608189352072105
+Epoch:30/35
+ * Loss 0.156 | Train Acc 95.264
+ * Student_Loss 0.407 | Soft_Loss 0.290 | Rm_Loss 0.000 | Train Acc 93.311
+LR: 0.0002419717036783768
+Epoch:31/35
+ * Loss 0.159 | Train Acc 94.482
+ * Student_Loss 0.406 | Soft_Loss 0.290 | Rm_Loss 0.000 | Train Acc 93.066
+LR: 0.000197355408192904
+Epoch:32/35
+ * Loss 0.120 | Train Acc 96.631
+ * Student_Loss 0.367 | Soft_Loss 0.266 | Rm_Loss 0.000 | Train Acc 94.531
+LR: 0.00015232632607052292
+Epoch:33/35
+ * Loss 0.138 | Train Acc 95.508
+ * Student_Loss 0.398 | Soft_Loss 0.281 | Rm_Loss 0.000 | Train Acc 93.018
+LR: 0.00010697863969793642
+Epoch:34/35
+ * Loss 0.156 | Train Acc 95.654
+ * Student_Loss 0.383 | Soft_Loss 0.264 | Rm_Loss 0.000 | Train Acc 93.164
+LR: 6.140719785137411e-05
+Epoch:35/35
+ * Loss 0.162 | Train Acc 94.385
+ * Student_Loss 0.409 | Soft_Loss 0.279 | Rm_Loss 0.000 | Train Acc 91.504
+validation split name: 1
+ * Val Teacher Acc 83.610, Total time 4.72
+ * Val Student Acc 68.877, Total time 0.00
+validation split name: 2
+ * Val Teacher Acc 71.089, Total time 6.03
+ * Val Student Acc 63.827, Total time 0.00
+validation split name: 3
+ * Val Teacher Acc 79.385, Total time 4.98
+ * Val Student Acc 68.354, Total time 0.00
+validation split name: 4
+ * Val Teacher Acc 72.012, Total time 5.88
+ * Val Student Acc 63.557, Total time 0.00
+validation split name: 5
+ * Val Teacher Acc 79.032, Total time 5.30
+ * Val Student Acc 76.290, Total time 0.00
+validation split name: 6
+ * Val Teacher Acc 75.753, Total time 5.40
+ * Val Student Acc 67.353, Total time 0.00
+validation split name: 7
+ * Val Teacher Acc 75.943, Total time 4.81
+ * Val Student Acc 70.377, Total time 0.00
+validation split name: 8
+ * Val Teacher Acc 73.899, Total time 5.36
+ * Val Student Acc 71.226, Total time 0.00
+validation split name: 9
+ * Val Teacher Acc 74.787, Total time 5.14
+ * Val Student Acc 64.395, Total time 0.00
+validation split name: 10
+ * Val Teacher Acc 72.399, Total time 4.08
+ * Val Student Acc 68.790, Total time 0.00
+===Summary of experiment repeats: 1 / 1 ===
+acc  | mean: 0.0 std: 0.0
+time  | mean: 0.51371149122715 std: 0.0

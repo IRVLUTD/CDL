@@ -235,20 +235,60 @@ class NormalNN(nn.Module):
         self.optimizer.step()
         return total_loss.detach(), logits
     
+    def get_t_p_list_(self, input, s_feat, K_list, A_list, P_list):
+
+        with torch.no_grad():
+            x_querry, _ = s_feat(input)
+            x_querry = x_querry[:,0,:]
+
+        prompt_param = self.config['prompt_param']
+        e_pool_size = int(prompt_param[1][0])   
+        n_tasks = int(prompt_param[0])
+        e_p_length = int(prompt_param[1][1])
+
+        task_count = self.model.module.prompt.task_count
+      
+        # print("e_p_length:",e_pool_size)
+        # print("n_tasks:",n_tasks)
+        # print("task_count:",task_count)
+
+        e_layers = [0,1,2,3,4]
+        p_list_ = []
+
+        pt = int(e_pool_size / (n_tasks))
+
+        f = int((task_count + 1) * pt)
+
+        for l in e_layers:
+            K = K_list[l][0:f]
+            A = A_list[l][0:f]
+            P = P_list[l][0:f]
+         
+            a_querry = torch.einsum('bd,kd->bkd', x_querry, A)       
+            n_K = nn.functional.normalize(K, dim=1)
+            q = nn.functional.normalize(a_querry, dim=2)
+            aq_k = torch.einsum('bkd,kd->bk', q, n_K)
+            P_ = torch.einsum('bk,kld->bld', aq_k, P)
+            i = int(e_p_length/2)
+            Ek = P_[:,:i,:]
+            Ev = P_[:,i:,:]
+
+            p_return = [Ek, Ev]
+
+            p_list_.append(p_return)
+        return p_list_
+                
+              
 
 
-    def validation(self, dataloader, model=None, task_in = None, task_metric='acc',  verbal = True, task_global=False, t_or_s=None, t_p_list_=None):
+
+
+    def validation(self, dataloader, model=None, task_metric='acc',  verbal = True, task_global=False, t_or_s=None, t_p_list_=None):
 
         if model is None:
-            # if t_or_s == 0:
-            #     model = self.model
-            # elif t_or_s ==1:
-            #     model = self.s_model
-
             model = self.model
             s_model = self.s_model
 
-        # This function doesn't distinguish tasks.
         batch_timer = Timer()
         acc = AverageMeter()
         s_acc = AverageMeter()
@@ -260,46 +300,30 @@ class NormalNN(nn.Module):
         s_orig_mode = s_model.training
         s_model.eval()
 
+        K_list, A_list, P_list = model.module.prompt.get_K_A_P()
+        # print("K_list:",K_list[0][10:20])
+
+        s_feat = model.module.s_feat
+
         for i, (input, target, task) in enumerate(dataloader):
 
             if self.gpu:
                 with torch.no_grad():
                     input = input.cuda()
                     target = target.cuda()
-            if task_in is None:
-                output, p_list_ = model.forward(input)
-                output = output[:, :self.valid_out_dim]
-                s_output = s_model.forward(input, t_p_list_ = p_list_)[:, :self.valid_out_dim]
+            # print("input:",input)
+            output, p_list_ = model.forward(input)
+            output = output[:, :self.valid_out_dim]
+            # print("p_list_:",p_list_[0][0][:,:,:5])
 
-                # self.log(' * Target {target}, Task {task}'
-                #     .format(target=target, task=task))
-                acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
-                s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
-            else:
-                mask = target >= task_in[0]
-                mask_ind = mask.nonzero().view(-1) 
-                input, target = input[mask_ind], target[mask_ind]
+            p_list_test = self.get_t_p_list_(input, s_feat, K_list, A_list, P_list)
+            # print("p_list_test:",p_list_test[0][0][:,:,:5])
 
-                mask = target < task_in[-1]
-                mask_ind = mask.nonzero().view(-1) 
-                input, target = input[mask_ind], target[mask_ind]
-                
-                if len(target) > 1:
-                    if task_global:
-                        #output = model.forward(input)[:, :self.valid_out_dim]
-                        output, p_list_ = model.forward(input)
-                        output = output[:, :self.valid_out_dim]
-                        s_output = s_model.forward(input, t_p_list_ = p_list_)[:, :self.valid_out_dim]
+            s_output = s_model.forward(input, t_p_list_ = p_list_test)[:, :self.valid_out_dim]
 
-                        acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
-                        s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
-                    else:
-                        #output = model.forward(input)[:, task_in]
-                        output, p_list_ = model.forward(input)
-                        output = output[:, task_in]
-                        s_output = s_model.forward(input, t_p_list_ = p_list_)[:, task_in]
-                        acc = accumulate_acc(output, target-task_in[0], task, acc, topk=(self.top_k,))
-                        s_acc = accumulate_acc(s_output, target-task_in[0], task, s_acc, topk=(self.top_k,))
+            acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
+            s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
+          
             
         model.train(orig_mode)
         s_model.train(s_orig_mode)

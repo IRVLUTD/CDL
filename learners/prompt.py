@@ -52,6 +52,8 @@ class Prompt(NormalNN):
             self.optimizer.zero_grad()
             total_loss.backward()
             self.optimizer.step()
+        
+
 
         return total_loss.detach(), logits, cur_logits, p_list_, t_corr_list
     
@@ -80,6 +82,7 @@ class Prompt(NormalNN):
         self.s_optimizer.zero_grad()
         total_loss.backward()
         self.s_optimizer.step()
+
 
         
         return total_loss.detach(), soft_loss, rm_loss_.sum(), (logits+kd_logits)/2
