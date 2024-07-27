@@ -61,6 +61,155 @@ class CustomNetwork(nn.Module):
         return k, v
 
 
+class attention_base(nn.Module):
+    def __init__(self, emb_d, n_tasks, prompt_param, key_dim):
+        super().__init__()
+        self.task_count = 0
+        self.emb_d = emb_d
+        self.key_d = key_dim
+        self.n_tasks = n_tasks
+        self._init_smart(prompt_param)
+
+        for e in self.e_layers:
+            e_l = self.e_p_length
+            p = tensor_prompt(self.e_pool_size, e_l, emb_d)
+            k = tensor_prompt(self.e_pool_size, self.key_d)
+            a = tensor_prompt(self.e_pool_size, self.key_d)
+            p = self.gram_schmidt(p)
+            k = self.gram_schmidt(k)
+            a = self.gram_schmidt(a)
+            setattr(self, f'e_p_{e}',p)
+            setattr(self, f'e_k_{e}',k)
+            setattr(self, f'e_a_{e}',a)
+
+    def _init_smart(self, prompt_param):
+
+        # prompt basic param
+        self.e_pool_size = int(prompt_param[0])
+        self.e_p_length = int(prompt_param[1])
+        self.e_layers = [0,1,2,3,4]
+
+    def gram_schmidt(self, vv):
+
+        def projection(u, v):
+            denominator = (u * u).sum()
+
+            if denominator < 1e-8:
+                return None
+            else:
+                return (v * u).sum() / denominator * u
+
+        # check if the tensor is 3D and flatten the last two dimensions if necessary
+        is_3d = len(vv.shape) == 3
+        if is_3d:
+            shape_2d = copy.deepcopy(vv.shape)
+            vv = vv.view(vv.shape[0],-1)
+
+        # swap rows and columns
+        vv = vv.T
+
+        # process matrix size
+        nk = vv.size(1)
+        uu = torch.zeros_like(vv, device=vv.device)
+
+        # get starting point
+        pt = int(self.e_pool_size / (self.n_tasks))
+        s = int(self.task_count * pt)
+        f = int((self.task_count + 1) * pt)
+        if s > 0:
+            uu[:, 0:s] = vv[:, 0:s].clone()
+        for k in range(s, f):
+            redo = True
+            while redo:
+                redo = False
+                vk = torch.randn_like(vv[:,k]).to(vv.device)
+                uk = 0
+                for j in range(0, k):
+                    if not redo:
+                        uj = uu[:, j].clone()
+                        proj = projection(uj, vk)
+                        if proj is None:
+                            redo = True
+                            print('restarting!!!')
+                        else:
+                            uk = uk + proj
+                if not redo: uu[:, k] = vk - uk
+        for k in range(s, f):
+            uk = uu[:, k].clone()
+            uu[:, k] = uk / (uk.norm())
+
+        # undo swapping of rows and columns
+        uu = uu.T 
+
+        # return from 2D
+        if is_3d:
+            uu = uu.view(shape_2d)
+        
+        return torch.nn.Parameter(uu)
+    
+    def forward(self, x_querry, l, train=False):
+
+        # e prompts
+        e_valid = False
+
+        
+        if l in self.e_layers:
+            e_valid = True
+            B, C = x_querry.shape
+
+            
+
+            K = getattr(self,f'e_k_{l}')
+            A = getattr(self,f'e_a_{l}')
+            p = getattr(self,f'e_p_{l}')
+            pt = int(self.e_pool_size / (self.n_tasks))
+            s = int(self.task_count * pt)
+            f = int((self.task_count + 1) * pt)
+            
+            # freeze/control past tasks
+            if train:
+                if self.task_count > 0:
+                    K = torch.cat((K[:s].detach().clone(),K[s:f]), dim=0)
+                    A = torch.cat((A[:s].detach().clone(),A[s:f]), dim=0)
+                    p = torch.cat((p[:s].detach().clone(),p[s:f]), dim=0)
+                else:
+                    K = K[s:f]
+                    A = A[s:f]
+                    p = p[s:f]
+            else:
+                K = K[0:f]
+                A = A[0:f]
+                p = p[0:f]
+      
+            # with attention and cosine sim
+            # (b x 1 x d) * soft([1 x k x d]) = (b x k x d) -> attention = k x d
+            a_querry = torch.einsum('bd,kd->bkd', x_querry, A)
+            # # (b x k x d) - [1 x k x d] = (b x k) -> key = k x d
+            n_K = nn.functional.normalize(K, dim=1)
+            q = nn.functional.normalize(a_querry, dim=2)
+            aq_k = torch.einsum('bkd,kd->bk', q, n_K)
+            # (b x 1 x k x 1) * [1 x plen x k x d] = (b x plen x d) -> prompt = plen x k x d
+            P_ = torch.einsum('bk,kld->bld', aq_k, p)
+
+            # select prompts
+            i = int(self.e_p_length/2)
+            Ek = P_[:,:i,:]
+            Ev = P_[:,i:,:]
+
+  
+
+        # combine prompts for prefix tuning
+        if e_valid:
+            p_return = [Ek, Ev]
+        else:
+            p_return = None
+
+        # return
+        return p_return
+        
+
+
+
 
 class CodaPrompt(nn.Module):
     def __init__(self, emb_d, n_tasks, prompt_param, key_dim):
@@ -87,10 +236,8 @@ class CodaPrompt(nn.Module):
 
 
             e_l = self.e_p_length
-            print("!!!!!!!!!self.e_pool_size:",self.e_pool_size)
-            print("!!!!!!!!!e_l:",e_l)
-            print("!!!!!!!!!emb_d:",emb_d)
-            print("!!!!!!!!!self.key_d:",self.key_d)
+
+
             p = tensor_prompt(self.e_pool_size, e_l, emb_d)
             k = tensor_prompt(self.e_pool_size, self.key_d)
             a = tensor_prompt(self.e_pool_size, self.key_d)
@@ -260,6 +407,23 @@ class CodaPrompt(nn.Module):
 
         # return
         return p_return, loss, x_block
+    
+    def get_K_A_P(self):
+        K_list = []
+        A_list = []
+        P_list = []
+        for l in self.e_layers:
+            K = getattr(self,f'e_k_{l}')
+            A = getattr(self,f'e_a_{l}')
+            P = getattr(self,f'e_p_{l}')
+
+            K_list.append(K)
+            A_list.append(A)
+            P_list.append(P)
+        return K_list, A_list, P_list
+
+
+
 
 def ortho_penalty(t):
     return ((t @t.T - torch.eye(t.shape[0]).cuda())**2).mean()
@@ -466,7 +630,7 @@ class ViTZoo(nn.Module):
             s_load_dict = s_vit_model_function(pretrained=True).state_dict()
 
             del s_load_dict['head.weight']; del s_load_dict['head.bias']
-            s_zoo_model.load_state_dict(s_load_dict,strict=True)
+            s_zoo_model.load_state_dict(s_load_dict)
 
 
 
@@ -479,14 +643,14 @@ class ViTZoo(nn.Module):
             load_dict = vit_model_function(pretrained=True).state_dict()
 
             del load_dict['head.weight']; del load_dict['head.bias']
-            zoo_model.load_state_dict(load_dict,strict=True)
+            zoo_model.load_state_dict(load_dict)
 
  
         #Adding the project_fc_layers for student model
 
         if(t_or_s==1):
   
-            self.project_fc_layers = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['t_embed_dim'])
+            self.project_fc_layers = attention_base(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['t_embed_dim'])
             #self.project_fc_layers = CustomNetwork(768, 192)
 
 
@@ -512,6 +676,16 @@ class ViTZoo(nn.Module):
         self.s_feat = s_zoo_model
 
         
+
+
+
+
+
+    def get_KAP(self):
+        K_list, A_list, P_list = self.prompt.get_K_A_P()
+
+        return K_list, A_list, P_list
+
     # pen: get penultimate features    
     def forward(self, x, pen=False, train=False, t_p_list_=None, t_corr_list_=None):
 
@@ -519,12 +693,14 @@ class ViTZoo(nn.Module):
         if self.prompt is not None:
             
             #query function
+            
             with torch.no_grad():
                 q, _ = self.s_feat(x)
                 q = q[:,0,:]
-
+            
+            
             if(self.t_or_s==0):
-                
+                # print("teacher querry:",q)
                 out, prompt_loss, p_list_, t_corr_list = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id)
                 out = out[:,0,:]
                 out = out.view(out.size(0), -1)
@@ -535,7 +711,7 @@ class ViTZoo(nn.Module):
                     return out, p_list_
             
             elif(self.t_or_s==1):
-
+                # print("student querry:",q)
                 out, prompt_loss, rm_loss_ = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, project_fc_layers=self.project_fc_layers, t_corr_list_=t_corr_list_)
                 
                 kd_out = out[:,0,:]
@@ -565,6 +741,7 @@ class ViTZoo(nn.Module):
                 out = self.last(out)
             
             return out
+
 
 
                     

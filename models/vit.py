@@ -241,6 +241,7 @@ class VisionTransformer(nn.Module):
         x = x + self.pos_embed[:,:x.size(1),:]
         x = self.pos_drop(x)
 
+
         prompt_loss = torch.zeros((1,), requires_grad=True).cuda()
         rm_loss_ = torch.zeros((1,), requires_grad=True).cuda()
 
@@ -289,28 +290,25 @@ class VisionTransformer(nn.Module):
                 x_norm = nn.functional.normalize(x, dim=2)
                 x_norm_transpose = x_norm.transpose(1, 2)
 
-
                 t_corr_matrix = torch.matmul(x_norm, x_norm_transpose)
-                #print("tttttttt  t_corr_matrix:",t_corr_matrix)
                 t_corr_list.append(t_corr_matrix)
-                #print("+++++++++++++++t_corr_matrix.shape:",t_corr_matrix.shape)
+        
 
             elif(self.t_or_s==1):
-
-                if(t_p_list_[i] is not None):
+               
+                if i in [0,1,2,3,4] and (t_p_list_[i] is not None):
                 
                     t_prompt_k = t_p_list_[i][0].detach().clone()
                     t_prompt_v = t_p_list_[i][1].detach().clone()
 
                     t_prompt_all = torch.cat((t_prompt_k, t_prompt_v), dim=1)
-
                     t_prompt_all =  t_prompt_all.mean(dim=1)
-
+        
                     if train:
-                        t_s_prompt, _ ,_ = project_fc_layers.forward(t_prompt_all, i, train=True, task_id=task_id)
+                        t_s_prompt = project_fc_layers.forward(t_prompt_all, i, train=True)
                     
                     else:
-                        t_s_prompt, _ ,_ = project_fc_layers.forward(t_prompt_all, i, train=False, task_id=task_id)
+                        t_s_prompt = project_fc_layers.forward(t_prompt_all, i, train=False)
 
                    
 
@@ -326,7 +324,7 @@ class VisionTransformer(nn.Module):
                     # if(i==0):
                     #     first_prompt = torch.cat((t_prompt_k, t_prompt_v), dim=1)
                         
-                   #t_s_prompt = [t_prompt_k, t_prompt_v]
+                    #t_s_prompt = [t_prompt_k, t_prompt_v]
                     #t_prompt_ = [Ek, Ev]
 
                     x = blk(x, register_blk==i, prompt=p_list, t_prompt = t_s_prompt)
@@ -347,8 +345,11 @@ class VisionTransformer(nn.Module):
                     
                     
                 else:
-                    x = blk(x, register_blk==i, prompt=p_list, t_prompt = t_p_list_[i])
-
+                    #x = blk(x, register_blk==i, prompt=p_list, t_prompt = t_p_list_[i])
+                    x = blk(x, register_blk==i, prompt=p_list)
+            else:
+                x = blk(x, register_blk==i, prompt=p_list)
+                
             
                
             # if i == 11: x = x.detach()
@@ -359,11 +360,7 @@ class VisionTransformer(nn.Module):
         #     print("#############rm_loss_:",rm_loss_)
 
         if(self.t_or_s ==0):
-
-            #print("Teacher :t_p_list_:",p_list_[0][0][0][1][10])
-
-            
-
+ 
             return x, prompt_loss, p_list_, t_corr_list
 
  
