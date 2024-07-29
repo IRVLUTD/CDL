@@ -700,7 +700,6 @@ class ViTZoo(nn.Module):
             
             
             if(self.t_or_s==0):
-                # print("teacher querry:",q)
                 out, prompt_loss, p_list_, t_corr_list = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id)
                 out = out[:,0,:]
                 out = out.view(out.size(0), -1)
@@ -711,7 +710,6 @@ class ViTZoo(nn.Module):
                     return out, p_list_
             
             elif(self.t_or_s==1):
-                # print("student querry:",q)
                 out, prompt_loss, rm_loss_ = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, project_fc_layers=self.project_fc_layers, t_corr_list_=t_corr_list_)
                 
                 kd_out = out[:,0,:]

@@ -1338,3 +1338,63 @@ Epoch:12/35
  * Loss 0.204 | Train Acc 94.393
  * Student_Loss 0.469 | Soft_Loss 0.323 | Rm_Loss 0.000 | Train Acc 90.625
 LR: 0.0008760840168540486
+Epoch:13/35
+ * Loss 0.231 | Train Acc 93.474
+ * Student_Loss 0.500 | Soft_Loss 0.332 | Rm_Loss 0.000 | Train Acc 89.752
+LR: 0.0008531225878500978
+Epoch:14/35
+ * Loss 0.210 | Train Acc 94.347
+ * Student_Loss 0.481 | Soft_Loss 0.328 | Rm_Loss 0.000 | Train Acc 90.579
+LR: 0.0008283767760053944
+Epoch:15/35
+ * Loss 0.204 | Train Acc 93.888
+ * Student_Loss 0.492 | Soft_Loss 0.327 | Rm_Loss 0.000 | Train Acc 90.717
+LR: 0.0008018983394173857
+Epoch:16/35
+ * Loss 0.196 | Train Acc 94.210
+ * Student_Loss 0.450 | Soft_Loss 0.311 | Rm_Loss 0.000 | Train Acc 91.866
+LR: 0.0007737426601244447
+Epoch:17/35
+ * Loss 0.194 | Train Acc 94.577
+ * Student_Loss 0.435 | Soft_Loss 0.299 | Rm_Loss 0.000 | Train Acc 91.958
+LR: 0.0007439686282693431
+Epoch:18/35
+ * Loss 0.215 | Train Acc 94.301
+ * Student_Loss 0.462 | Soft_Loss 0.307 | Rm_Loss 0.000 | Train Acc 90.533
+LR: 0.0007126385189252054
+Epoch:19/35
+ * Loss 0.182 | Train Acc 94.807
+ * Student_Loss 0.443 | Soft_Loss 0.309 | Rm_Loss 0.000 | Train Acc 91.636
+LR: 0.0006798178618415755
+Epoch:20/35
+ * Loss 0.178 | Train Acc 94.715
+ * Student_Loss 0.440 | Soft_Loss 0.299 | Rm_Loss 0.000 | Train Acc 91.912
+LR: 0.0006455753043830371
+Epoch:21/35
+ * Loss 0.170 | Train Acc 95.221
+ * Student_Loss 0.415 | Soft_Loss 0.294 | Rm_Loss 0.000 | Train Acc 93.107
+LR: 0.0006099824679470568
+Epoch:22/35
+ * Loss 0.164 | Train Acc 95.175
+ * Student_Loss 0.429 | Soft_Loss 0.297 | Rm_Loss 0.000 | Train Acc 92.555
+LR: 0.000573113798161373
+Epoch:23/35
+ * Loss 0.153 | Train Acc 95.496
+ * Student_Loss 0.402 | Soft_Loss 0.291 | Rm_Loss 0.000 | Train Acc 93.474
+LR: 0.0005350464091742497
+Epoch:24/35
+ * Loss 0.184 | Train Acc 94.623
+ * Student_Loss 0.423 | Soft_Loss 0.302 | Rm_Loss 0.000 | Train Acc 92.969
+LR: 0.0004958599223632802
+Epoch:25/35
+ * Loss 0.144 | Train Acc 96.140
+ * Student_Loss 0.400 | Soft_Loss 0.285 | Rm_Loss 0.000 | Train Acc 93.474
+LR: 0.00045563629980009554
+Epoch:26/35
+ * Loss 0.148 | Train Acc 95.588
+ * Student_Loss 0.381 | Soft_Loss 0.276 | Rm_Loss 0.000 | Train Acc 93.566
+LR: 0.00041445967281929686
+Epoch:27/35
+ * Loss 0.157 | Train Acc 95.726
+ * Student_Loss 0.401 | Soft_Loss 0.289 | Rm_Loss 0.000 | Train Acc 93.520
+LR: 0.0003724161660501829

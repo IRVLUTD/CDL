@@ -13,12 +13,11 @@ import learners
 
 class Trainer:
 
-    def __init__(self, args, seed, metric_keys, save_keys):
+    def __init__(self, args, seed, metric_keys):
 
         # process inputs
         self.seed = seed
         self.metric_keys = metric_keys
-        self.save_keys = save_keys
         self.log_dir = args.log_dir
         self.batch_size = args.batch_size
         self.workers = args.workers
@@ -60,14 +59,6 @@ class Trainer:
         # load tasks
         class_order = np.arange(num_classes).tolist()
         class_order_logits = np.arange(num_classes).tolist()
-        # if self.seed > 0 and args.rand_split:
-        #     print('=============================================')
-        #     print('Shuffling....')
-        #     print('pre-shuffle:' + str(class_order))
-        #     random.seed(self.seed)
-        #     random.shuffle(class_order)
-        #     print('post-shuffle:' + str(class_order))
-        #     print('=============================================')
         self.tasks = []
         self.tasks_logits = []
         p = 0
@@ -80,8 +71,6 @@ class Trainer:
         self.task_names = [str(i+1) for i in range(self.num_tasks)]
 
         # number of tasks to perform
-        # print("args.max_task:",args.max_task)
-        # print("self.task_names:",self.task_names)
         if args.max_task > 0:
             self.max_task = min(args.max_task, len(self.task_names))
         else:
@@ -137,6 +126,9 @@ class Trainer:
                         }
         self.learner_type, self.learner_name = args.learner_type, args.learner_name
         self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)
+
+        self.task_acc_pre = np.zeros([self.num_tasks])
+        self.task_acc_pro = np.zeros([self.num_tasks])
         
 
 
@@ -151,7 +143,7 @@ class Trainer:
         acc_avg,s_acc_avg=self.learner.validation(test_loader, task_metric=task)
         return acc_avg, s_acc_avg
 
-    def train(self, avg_metrics, s_avg_metrics, args):
+    def train(self, args):
     
         # temporary results saving
         temp_table = {}
@@ -227,17 +219,17 @@ class Trainer:
             
             # evaluate acc
             acc_table = []
-            acc_table_ssl = []
-
             s_acc_table = []
             self.reset_cluster_labels = True
             for j in range(i+1):
                 t_eval, s_eval = self.task_eval(j)
                 acc_table.append(t_eval)
                 s_acc_table.append(s_eval)
+                 
             temp_table['acc'].append(np.mean(np.asarray(acc_table)))
-
             s_temp_table['acc'].append(np.mean(np.asarray(s_acc_table)))
+            self.task_acc_pre[i] = s_acc_table[-1]
+
 
             # save temporary acc results
             for mkey in ['acc']:
@@ -247,33 +239,21 @@ class Trainer:
                 s_save_file = temp_dir + mkey + '_s.csv'
                 np.savetxt(s_save_file, np.asarray(s_temp_table[mkey]), delimiter=",", fmt='%.2f')  
 
-            if avg_train_time is not None: avg_metrics['time']['global'][i] = avg_train_time
 
-        return avg_metrics 
+
+            
+   
+            # Print the summary so far
+            if(i == (self.max_task-1)):
+                self.task_acc_pro = np.array(s_acc_table)
+                self.forget = (np.sum(self.task_acc_pre - self.task_acc_pro)) / self.num_tasks
+                print('===Summary of student experiment===')
+                print('Acc | mean:', s_temp_table['acc'][-1])
+                print('Forgetting:', self.forget)
+
+
+
+
     
-    def summarize_acc(self, acc_dict, acc_table, acc_table_pt):
 
-        # unpack dictionary
-        avg_acc_all = acc_dict['global']
-        avg_acc_pt = acc_dict['pt']
-        avg_acc_pt_local = acc_dict['pt-local']
-
-        # Calculate average performance across self.tasks
-        # Customize this part for a different performance metric
-        avg_acc_history = [0] * self.max_task
-        for i in range(self.max_task):
-            train_name = self.task_names[i]
-            cls_acc_sum = 0
-            for j in range(i+1):
-                val_name = self.task_names[j]
-                cls_acc_sum += acc_table[val_name][train_name]
-                avg_acc_pt[j,i,self.seed] = acc_table[val_name][train_name]
-                avg_acc_pt_local[j,i,self.seed] = acc_table_pt[val_name][train_name]
-            avg_acc_history[i] = cls_acc_sum / (i + 1)
-
-        # Gather the final avg accuracy
-        avg_acc_all[:,self.seed] = avg_acc_history
-
-        # repack dictionary and return
-        return {'global': avg_acc_all,'pt': avg_acc_pt,'pt-local': avg_acc_pt_local}
 

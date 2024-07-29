@@ -4,7 +4,7 @@ other_split_size: 20
 schedule:
 - 35
 schedule_type: cosine
-batch_size: 64
+batch_size: 32
 optimizer: Adam
 lr: 0.001
 momentum: 0.9
