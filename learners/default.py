@@ -11,6 +11,7 @@ from torch.optim import Optimizer
 import contextlib
 import os
 import copy
+import numpy as np
 from utils.schedulers import CosineSchedule
 
 class NormalNN(nn.Module):
@@ -25,6 +26,7 @@ class NormalNN(nn.Module):
         self.out_dim = learner_config['out_dim']
         self.t_model_name = learner_config['t_model']
         self.s_model_name = learner_config['s_model']
+
 
         if self.s_model_name == 'vit_base_patch16_224':
             s_embed_dim = 768
@@ -148,15 +150,12 @@ class NormalNN(nn.Module):
             rm_losses = AverageMeter()
             s_acc = AverageMeter()
 
-            batch_time = AverageMeter()
-            batch_timer = Timer()
             for epoch in range(self.config['schedule'][-1]):
                 self.epoch=epoch
 
                 if epoch > 0: self.scheduler.step()
                 for param_group in self.optimizer.param_groups:
                     self.log('LR:', param_group['lr'])
-                batch_timer.tic()
                 for i, (x, y, task)  in enumerate(train_loader):
 
                     # verify in train mode
@@ -175,8 +174,7 @@ class NormalNN(nn.Module):
                     s_loss, soft_loss, rm_loss_, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_)
 
                     # measure elapsed time
-                    batch_time.update(batch_timer.toc())  
-                    batch_timer.tic()
+
                     
                     # measure accuracy and record loss
                     y = y.detach()
@@ -186,7 +184,7 @@ class NormalNN(nn.Module):
                     s_losses.update(s_loss,  y.size(0))
                     soft_losses.update(soft_loss,  y.size(0))
                     rm_losses.update(rm_loss_, y.size(0))
-                    batch_timer.tic()
+
 
                 # eval update
                 self.log('Epoch:{epoch:.0f}/{total:.0f}'.format(epoch=self.epoch+1,total=self.config['schedule'][-1]))
@@ -289,11 +287,8 @@ class NormalNN(nn.Module):
             model = self.model
             s_model = self.s_model
 
-        batch_timer = Timer()
         acc = AverageMeter()
         s_acc = AverageMeter()
-        batch_timer.tic()
-
         orig_mode = model.training
         model.eval()
 
@@ -311,17 +306,15 @@ class NormalNN(nn.Module):
                 with torch.no_grad():
                     input = input.cuda()
                     target = target.cuda()
-            # print("input:",input)
-            output, p_list_ = model.forward(input)
-            output = output[:, :self.valid_out_dim]
-            # print("p_list_:",p_list_[0][0][:,:,:5])
+
+            # output, _ = model.forward(input)
+            # output = output[:, :self.valid_out_dim]
 
             p_list_test = self.get_t_p_list_(input, s_feat, K_list, A_list, P_list)
-            # print("p_list_test:",p_list_test[0][0][:,:,:5])
-
             s_output = s_model.forward(input, t_p_list_ = p_list_test)[:, :self.valid_out_dim]
 
-            acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
+            #Calculate the accuracy
+            #acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
             s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
           
             
@@ -329,11 +322,11 @@ class NormalNN(nn.Module):
         s_model.train(s_orig_mode)
 
         if verbal:
-            self.log(' * Val Teacher Acc {acc.avg:.3f}, Total time {time:.2f}'
-                    .format(acc=acc, time=batch_timer.toc()))
+            # self.log(' * Val Teacher Acc {acc.avg:.3f}'
+            #         .format(acc=acc))
             
-            self.log(' * Val Student Acc {acc.avg:.3f}, Total time {time:.2f}'
-                    .format(acc=s_acc, time=batch_timer.toc()))
+            self.log(' * Val Student Acc {acc.avg:.3f}'
+                    .format(acc=s_acc))
         
 
         return acc.avg, s_acc.avg

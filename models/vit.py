@@ -67,16 +67,7 @@ class Attention(nn.Module):
 
         if prompt is not None:
             pk, pv = prompt
-            # if t_prompt is not None:
-            #     pk = t_prompt[0]
-            #     pv = t_prompt[1]
-            # else:
-            #     pk, pv = prompt
-            #pk, pv = prompt
-            # print("pk:shape:",pk.shape)
-            # print("BBBBBBBB:",B)
             pk = pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
-           # print("after pk:shape:",pk.shape)
             pv = pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
             k = torch.cat((pk,k), dim=2)
             v = torch.cat((pv,v), dim=2)
@@ -84,11 +75,7 @@ class Attention(nn.Module):
         if t_prompt is not None:
             t_pk = t_prompt[0]
             t_pv = t_prompt[1]
-            # print("t_prompt:shape:",t_pk.shape)
-            # print("BBBBBBBB:",B)
-            # print("self.num_heads:",self.num_heads)
             t_pk = t_pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
-            #print("after t_prompt:shape:",t_pk.shape)
             t_pv = t_pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
             k = torch.cat((t_pk,k), dim=2)
             v = torch.cat((t_pv,v), dim=2)

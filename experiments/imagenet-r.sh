@@ -6,7 +6,7 @@ N_CLASS=200
 # save directory
 #OUTDIR=outputs/${DATASET}/10-task
 
-OUTDIR=outputs_test_0726_t_prompt_s_prompt_projectCODAlayer_No_Kd_tokens_buthave_kdlast_useKLDivLoss_basetosmall_epoch35_test_03_modify01/${DATASET}/10-task
+OUTDIR=outputs_test_0728_t_prompt_s_prompt_projectCODAlayer_No_Kd_tokens_buthave_kdlast_useKLDivLoss_largetobase_epoch35_test_modify07/${DATASET}/10-task
 
 # hard coded inputs
 GPUID='0 1'
@@ -30,8 +30,8 @@ python -u run.py --config $CONFIG --gpuid $GPUID --repeat $REPEAT --overwrite $O
     --learner_type prompt --learner_name CODAPrompt \
     --prompt_param 100 8 0.0 \
     --log_dir ${OUTDIR}/coda-p \
-    --t_model 'vit_base_patch16_224' \
-    --s_model 'vit_small_patch16_224'
+    --t_model 'vit_large_patch16_224' \
+    --s_model 'vit_base_patch16_224'
 
 # DualPrompt
 
