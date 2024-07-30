@@ -1,3 +1,9 @@
+'''
+ * Based on coda prompt here
+ * https://github.com/GT-RIPL/CODA-Prompt
+ * Build our CDL model on CODAPrompt baseline(DualPrompt and L2P)
+'''
+
 from __future__ import print_function
 import math
 import torch
@@ -63,7 +69,7 @@ class Prompt(NormalNN):
  
 
         # logits
-        logits, kd_logits, prompt_loss, rm_loss_ = self.s_model(inputs, train=True, t_p_list_ = p_list_, t_corr_list_ = t_corr_list_)
+        logits, kd_logits, prompt_loss = self.s_model(inputs, train=True, t_p_list_ = p_list_, t_corr_list_ = t_corr_list_)
         logits = logits[:,:self.valid_out_dim]
 
         # ori_logits = logits[:,self.last_valid_out_dim:self.valid_out_dim]
@@ -85,7 +91,7 @@ class Prompt(NormalNN):
 
 
         
-        return total_loss.detach(), soft_loss, rm_loss_.sum(), (logits+kd_logits)/2
+        return total_loss.detach(), soft_loss, (logits+kd_logits)/2
 
     # sets model optimizers
     def init_optimizer(self):

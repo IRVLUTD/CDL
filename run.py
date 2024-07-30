@@ -1,3 +1,9 @@
+'''
+ * Based on coda prompt here
+ * https://github.com/GT-RIPL/CODA-Prompt
+ * Build our CDL model on CODAPrompt baseline(DualPrompt and L2P)
+'''
+
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
