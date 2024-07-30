@@ -1,3 +1,9 @@
+'''
+ * Based on coda prompt here
+ * https://github.com/GT-RIPL/CODA-Prompt
+ * Build our CDL model on CODAPrompt baseline(DualPrompt and L2P)
+'''
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -197,8 +203,6 @@ class attention_base(nn.Module):
             Ev = P_[:,i:,:]
 
   
-
-        # combine prompts for prefix tuning
         if e_valid:
             p_return = [Ek, Ev]
         else:
@@ -225,19 +229,7 @@ class CodaPrompt(nn.Module):
 
         # e prompt init
         for e in self.e_layers:
-            # for model saving/loading simplicity, we init the full paramaters here
-            # however, please note that we reinit the new components at each task
-            # in the "spirit of continual learning", as we don't know how many tasks
-            # we will encounter at the start of the task sequence
-            #
-            # in the original paper, we used ortho init at the start - this modification is more 
-            # fair in the spirit of continual learning and has little affect on performance
-
-
-
             e_l = self.e_p_length
-
-
             p = tensor_prompt(self.e_pool_size, e_l, emb_d)
             k = tensor_prompt(self.e_pool_size, self.key_d)
             a = tensor_prompt(self.e_pool_size, self.key_d)
@@ -260,13 +252,6 @@ class CodaPrompt(nn.Module):
         
     def process_task_count(self):
         self.task_count += 1
-
-        # in the spirit of continual learning, we will reinit the new components
-        # for the new task with Gram Schmidt
-        #
-        # in the original paper, we used ortho init at the start - this modification is more 
-        # fair in the spirit of continual learning and has little affect on performance
-        # 
         # code for this function is modified from:
         # https://github.com/legendongary/pytorch-gram-schmidt/blob/master/gram_schmidt.py
         for e in self.e_layers:
@@ -479,8 +464,8 @@ class DualPrompt(nn.Module):
         if l in self.e_layers:
             e_valid = True
             B, C = x_querry.shape
-            K = getattr(self,f'e_k_{l}') # 0 based indexing here
-            p = getattr(self,f'e_p_{l}') # 0 based indexing here
+            K = getattr(self,f'e_k_{l}') 
+            p = getattr(self,f'e_p_{l}') 
             
             # cosine similarity to match keys/querries
             n_K = nn.functional.normalize(K, dim=1)
@@ -517,7 +502,7 @@ class DualPrompt(nn.Module):
         if l in self.g_layers:
             g_valid = True
             j = int(self.g_p_length/2)
-            p = getattr(self,f'g_p_{l}') # 0 based indexing here
+            p = getattr(self,f'g_p_{l}')
             P_ = p.expand(len(x_querry),-1,-1)
             Gk = P_[:,:j,:]
             Gv = P_[:,j:,:]
@@ -667,10 +652,8 @@ class ViTZoo(nn.Module):
  
         #Adding the project_fc_layers for student model
 
-        if(t_or_s==1):
-  
+        if(t_or_s==1): 
             self.project_fc_layers = attention_base(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['t_embed_dim'])
-            #self.project_fc_layers = CustomNetwork(768, 192)
 
 
 
@@ -708,15 +691,12 @@ class ViTZoo(nn.Module):
     # pen: get penultimate features    
     def forward(self, x, pen=False, train=False, t_p_list_=None, t_corr_list_=None):
 
-
         if self.prompt is not None:
             
-            #query function
-            
+            #query function            
             with torch.no_grad():
                 q, _ = self.s_feat(x)
-                q = q[:,0,:]
-            
+                q = q[:,0,:]            
             
             if(self.t_or_s==0):
                 out, prompt_loss, p_list_, t_corr_list = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id)
@@ -729,7 +709,7 @@ class ViTZoo(nn.Module):
                     return out, p_list_
             
             elif(self.t_or_s==1):
-                out, prompt_loss, rm_loss_ = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, project_fc_layers=self.project_fc_layers, t_corr_list_=t_corr_list_)
+                out, prompt_loss = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, project_fc_layers=self.project_fc_layers, t_corr_list_=t_corr_list_)
                 
                 kd_out = out[:,0,:]
                 kd_out = kd_out.view(kd_out.size(0), -1)
@@ -744,7 +724,7 @@ class ViTZoo(nn.Module):
                 total_out = (ori_out + kd_out)/2
 
                 if self.prompt is not None and train:
-                    return ori_out, kd_out, prompt_loss, rm_loss_
+                    return ori_out, kd_out, prompt_loss
                 else:
                     return total_out
                 
@@ -759,14 +739,6 @@ class ViTZoo(nn.Module):
             
             return out
 
-
-
-                    
-
-
-
-
-  
             
 def vit_pt_imnet(out_dim, block_division = None, prompt_flag = 'None', prompt_param=None, vit_model=None, shared_para=None, t_or_s=None):
     return ViTZoo(num_classes=out_dim, pt=True, prompt_flag=prompt_flag, prompt_param=prompt_param, vit_model=vit_model, shared_para=shared_para, t_or_s=t_or_s)

@@ -1,7 +1,7 @@
 ##  Continual Distillation Learning
 PyTorch code for the paper:\
-**Continual Distillation Learning**
-
+**Continual Distillation Learning**\
+Qifan Zhang, Yunhui Guo, Yu Xiang
 
 [arXiv](https://arxiv.org/abs/2407.13911), [Project](https://irvlutd.github.io/CDL/)
 
@@ -16,7 +16,7 @@ We study the problem of Continual Distillation Learning (CDL) that considers Kno
 ## Setup
  * Install anaconda: https://www.anaconda.com/distribution/
  * set up conda environment w/ python 3.8, ex: `conda create --name coda python=3.8`
- * `conda activate coda`
+ * `conda activate CDL`
  * `sh install_requirements.sh`
  * <b>NOTE: this framework was tested using `torch == 2.0.0` but should work for previous versions</b>
  
@@ -32,6 +32,26 @@ All commands should be run under the project root directory. **The scripts are s
 sh experiments/cifar100.sh
 sh experiments/imagenet-r.sh
 ```
+Or you can directly run the run.py and test on ImageNet-R dataset:
+
+```bash
+python -u run.py --config configs/imnet-r_prompt.yaml --overwrite 0 \
+    --learner_type prompt --learner_name CODAPrompt \
+    --prompt_param 100 8 0.0 \
+    --log_dir Demo_test/coda-p \
+    --t_model 'vit_base_patch16_224' \
+    --s_model 'vit_small_patch16_224' \
+    --random_s 1
+```
+
+* You can change the learner_name for DualPrompt or L2P.(And change the prompt_param for different learner. Check the imagenet-r.sh)
+* You can adjust the teacher and student's model with --t_model and --s_model.
+* Change the random_s(random seed) for different results.
+
+
+## Results
+
+The results will be saved in the created --log_dir folder, including the models for the teacher and student as well as the final average accuracy for both the teacher and student.
 
 ## Citation
 If you find the method useful in your research, please consider citing:

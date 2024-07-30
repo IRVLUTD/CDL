@@ -1,3 +1,9 @@
+'''
+ * Based on coda prompt here
+ * https://github.com/GT-RIPL/CODA-Prompt
+ * Build our CDL model on CODAPrompt baseline(DualPrompt and L2P)
+'''
+
 from __future__ import print_function
 import math
 import torch
@@ -147,7 +153,6 @@ class NormalNN(nn.Module):
 
             s_losses = AverageMeter()
             soft_losses = AverageMeter()
-            rm_losses = AverageMeter()
             s_acc = AverageMeter()
 
             for epoch in range(self.config['schedule'][-1]):
@@ -171,7 +176,7 @@ class NormalNN(nn.Module):
                     loss, output, cur_logits, p_list_, t_corr_list_= self.update_model(x, y, epoch)        
                     # pre_cls_logits = torch.softmax(output,dim=-1)
                     # predicts_ = torch.max(pre_cls_logits, dim=1)[1]
-                    s_loss, soft_loss, rm_loss_, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_)
+                    s_loss, soft_loss, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_)
 
 
                     
@@ -182,14 +187,13 @@ class NormalNN(nn.Module):
                     losses.update(loss,  y.size(0))
                     s_losses.update(s_loss,  y.size(0))
                     soft_losses.update(soft_loss,  y.size(0))
-                    rm_losses.update(rm_loss_, y.size(0))
 
 
                 # eval update
                 self.log('Epoch:{epoch:.0f}/{total:.0f}'.format(epoch=self.epoch+1,total=self.config['schedule'][-1]))
                 self.log(' * Loss {loss.avg:.3f} | Train Acc {acc.avg:.3f}'.format(loss=losses,acc=acc))
 
-                self.log(' * Student_Loss {loss.avg:.3f} | Soft_Loss {soft_loss.avg:.3f} | Rm_Loss {rm_loss.avg:.3f} | Train Acc {acc.avg:.3f}'.format(loss=s_losses, soft_loss=soft_losses, rm_loss=rm_losses, acc=s_acc))
+                self.log(' * Student_Loss {loss.avg:.3f} | Soft_Loss {soft_loss.avg:.3f} | Train Acc {acc.avg:.3f}'.format(loss=s_losses, soft_loss=soft_losses, acc=s_acc))
 
                 # reset
                 losses = AverageMeter()
@@ -197,7 +201,6 @@ class NormalNN(nn.Module):
 
                 s_losses = AverageMeter()
                 soft_losses = AverageMeter()
-                rm_losses = AverageMeter()
                 s_acc = AverageMeter()
                 
         self.model.eval()
@@ -402,6 +405,9 @@ class NormalNN(nn.Module):
         
         return p_list_
 
+    ########
+    ### Can add more promot_based model
+    ########
 
 
 
@@ -427,6 +433,10 @@ class NormalNN(nn.Module):
 
         elif(self.config['learner_name'] == 'L2P'):
             L2P_E_K_list, L2P_E_P_list, L2P_G_P_list = model.module.prompt.get_EK_EP_GP()
+        
+        ########
+        ### Can add more promot_based model
+        ########
 
         s_feat = model.module.s_feat
 
@@ -446,6 +456,9 @@ class NormalNN(nn.Module):
             elif(self.config['learner_name'] == 'L2P'):
                 p_list_test = self.l2p_get_t_p_list_(input, s_feat, L2P_E_K_list, L2P_E_P_list, L2P_G_P_list)
 
+            ########
+            ### Can add more promot_based model
+            ########
  
             s_output = s_model.forward(input, t_p_list_ = p_list_test)[:, :self.valid_out_dim]
 

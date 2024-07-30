@@ -63,7 +63,7 @@ class Attention(nn.Module):
     def forward(self, x, register_hook=False, prompt=None, t_prompt=None):
         B, N, C = x.shape
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
-        q, k, v = qkv[0], qkv[1], qkv[2]   # make torchscript happy (cannot use tensor as tuple)
+        q, k, v = qkv[0], qkv[1], qkv[2]
 
         if prompt is not None:
             pk, pv = prompt
@@ -153,15 +153,6 @@ class VisionTransformer(nn.Module):
 
         self.mse_loss = nn.MSELoss()
 
-        # self.first_prompt = None
-
-
-        # self.project_fc = nn.Linear(768, 384)
-
-        # self.kd_token = kd_token
-
-        # self.e_layers = [0,1,2,3,4]
-
         self.patch_embed = PatchEmbed(
             img_size=img_size, patch_size=patch_size, in_chans=in_chans, embed_dim=embed_dim)
 
@@ -237,17 +228,6 @@ class VisionTransformer(nn.Module):
                 else:
                     p_list, _, x = prompt.forward(q, i, x, train=False, task_id=task_id)
                 
-                # if p_list is not None and i == 1:
-                #     print(x[0,0,0:10])
-                #     print(p_list[0][0,0,0:10])
-                #     print(apple)
-                # if p_list is not None:
-                #     x = torch.concat((x[:,0,:].unsqueeze(1),p_list[0],p_list[1],x[:,1:,:]), dim=1)
-                #     p_list = None
-                # if (self.t_or_s==1):
-                #     p_list = t_p_list_[i]
-
-                #     p_list[0] = self.project_fc(p_list[0])
             else:
                 p_list = None
 
@@ -271,85 +251,39 @@ class VisionTransformer(nn.Module):
 
                     t_prompt_all = torch.cat((t_prompt_k, t_prompt_v), dim=1)
                     t_prompt_all =  t_prompt_all.mean(dim=1)
-        
                     if train:
-                        t_s_prompt = project_fc_layers.forward(t_prompt_all, i, train=True)
-                    
+                        t_s_prompt = project_fc_layers.forward(t_prompt_all, i, train=True)       
                     else:
                         t_s_prompt = project_fc_layers.forward(t_prompt_all, i, train=False)
-
-                   
-
-                    # Ek = t_prompt_all[:,:4,:]
-                    # Ev = t_prompt_all[:,4:,:]
-
-                    #t_prompt_k, t_prompt_v=project_fc_layers.forward(t_prompt_k,t_prompt_v, i)
-                    # t_prompt_k = project_fc_layers.forward(t_prompt_k, i)
-                    # t_prompt_v = project_fc_layers_v.forward(t_prompt_v, i)
-
-
-
-                    # if(i==0):
-                    #     first_prompt = torch.cat((t_prompt_k, t_prompt_v), dim=1)
-                        
-                    #t_s_prompt = [t_prompt_k, t_prompt_v]
-                    #t_prompt_ = [Ek, Ev]
-
                     x = blk(x, register_blk==i, prompt=p_list, t_prompt = t_s_prompt)
-
                     if train:
                         x_norm = nn.functional.normalize(x, dim=2)
                         x_norm_transpose = x_norm.transpose(1, 2)
                         
                         s_corr_matrix = torch.matmul(x_norm, x_norm_transpose)
                         t_corr_matrix_ = t_corr_list_[i].detach().clone()
-
-                        
-                        rm_loss = self.mse_loss(t_corr_matrix_, s_corr_matrix)
-                        rm_loss_ += rm_loss
-
-                    
-                    
+              
+                        # rm_loss = self.mse_loss(t_corr_matrix_, s_corr_matrix)
+                        # rm_loss_ += rm_loss                   
                 else:
-                    #x = blk(x, register_blk==i, prompt=p_list, t_prompt = t_p_list_[i])
                     x = blk(x, register_blk==i, prompt=p_list)
             else:
                 x = blk(x, register_blk==i, prompt=p_list)
-                
-            
-               
-            # if i == 11: x = x.detach()
         
         x = self.norm(x)
 
-        # if(self.t_or_s ==1):
-        #     print("#############rm_loss_:",rm_loss_)
-
         if(self.t_or_s ==0):
- 
             return x, prompt_loss, p_list_, t_corr_list
 
- 
-
         elif(self.t_or_s ==1):
-
-            rm_loss_ = torch.zeros((1,), requires_grad=True).cuda()
-            return x, prompt_loss, rm_loss_
+            #rm_loss_ = torch.zeros((1,), requires_grad=True).cuda()
+            return x, prompt_loss
         
         return x, prompt_loss
 
     @torch.jit.ignore()
     def load_pretrained(self, checkpoint_path, prefix=''):
         _load_weights(self, checkpoint_path, prefix)
-
-# def normalize_matrix(x):
-#     mean = x.mean(dim=2, keepdim=True)
-#     std = x.std(dim=2, keepdim=True)
-#     x_normalized = (x - mean) / (std + 1e-5)
-
-#     return x_normalized
-
-
 
 @torch.no_grad()
 def _load_weights(model: VisionTransformer, checkpoint_path: str, prefix: str = ''):
