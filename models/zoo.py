@@ -541,6 +541,25 @@ class DualPrompt(nn.Module):
             return p_return, loss, x_block
         else:
             return p_return, 0, x_block
+        
+    def get_EK_EP_GP(self):
+        E_K_list = []
+        E_P_list = []
+        G_P_list = []
+
+        for l in self.e_layers: 
+            E_K = getattr(self,f'e_k_{l}')
+            E_P = getattr(self,f'e_p_{l}')
+
+            E_K_list.append(E_K)
+            E_P_list.append(E_P)
+        
+        for l in self.g_layers:
+            G_P = getattr(self,f'g_p_{l}')
+
+            G_P_list.append(G_P)
+        
+        return E_K_list, E_P_list, G_P_list
 
 # @inproceedings{wang2022learning,
 #   title={Learning to prompt for continual learning},

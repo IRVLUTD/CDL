@@ -4,7 +4,9 @@ other_split_size: 10
 schedule:
 - 20
 schedule_type: cosine
-batch_size: 32
+#When teacher used large vit model, set the batch_size to 32 to prevent exceeding the memory capacity.
+#batch_size: 32
+batch_size: 64
 optimizer: Adam
 lr: 0.001
 momentum: 0.9

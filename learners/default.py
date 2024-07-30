@@ -173,7 +173,6 @@ class NormalNN(nn.Module):
                     # predicts_ = torch.max(pre_cls_logits, dim=1)[1]
                     s_loss, soft_loss, rm_loss_, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_)
 
-                    # measure elapsed time
 
                     
                     # measure accuracy and record loss
@@ -212,10 +211,6 @@ class NormalNN(nn.Module):
         if self.memory_size > 0:
             train_dataset.update_coreset(self.memory_size, np.arange(self.last_valid_out_dim))
 
-        try:
-            return batch_time.avg
-        except:
-            return None
 
     def criterion(self, logits, targets, data_weights):
         loss_supervised = (self.criterion_fn(logits, targets.long()) * data_weights).mean()
@@ -233,7 +228,7 @@ class NormalNN(nn.Module):
         self.optimizer.step()
         return total_loss.detach(), logits
     
-    def get_t_p_list_(self, input, s_feat, K_list, A_list, P_list):
+    def coda_get_t_p_list_(self, input, s_feat, K_list, A_list, P_list):
 
         with torch.no_grad():
             x_querry, _ = s_feat(input)
@@ -245,10 +240,6 @@ class NormalNN(nn.Module):
         e_p_length = int(prompt_param[1][1])
 
         task_count = self.model.module.prompt.task_count
-      
-        # print("e_p_length:",e_pool_size)
-        # print("n_tasks:",n_tasks)
-        # print("task_count:",task_count)
 
         e_layers = [0,1,2,3,4]
         p_list_ = []
@@ -257,26 +248,159 @@ class NormalNN(nn.Module):
 
         f = int((task_count + 1) * pt)
 
-        for l in e_layers:
-            K = K_list[l][0:f]
-            A = A_list[l][0:f]
-            P = P_list[l][0:f]
-         
-            a_querry = torch.einsum('bd,kd->bkd', x_querry, A)       
-            n_K = nn.functional.normalize(K, dim=1)
-            q = nn.functional.normalize(a_querry, dim=2)
-            aq_k = torch.einsum('bkd,kd->bk', q, n_K)
-            P_ = torch.einsum('bk,kld->bld', aq_k, P)
-            i = int(e_p_length/2)
-            Ek = P_[:,:i,:]
-            Ev = P_[:,i:,:]
+        e_index = 0
+        for l in range(int(self.shared_para['t_depth'])):
+            if l in e_layers:
+                K = K_list[e_index][0:f]
+                A = A_list[e_index][0:f]
+                P = P_list[e_index][0:f]
+                e_index = e_index + 1
+            
+                a_querry = torch.einsum('bd,kd->bkd', x_querry, A)       
+                n_K = nn.functional.normalize(K, dim=1)
+                q = nn.functional.normalize(a_querry, dim=2)
+                aq_k = torch.einsum('bkd,kd->bk', q, n_K)
+                P_ = torch.einsum('bk,kld->bld', aq_k, P)
+                i = int(e_p_length/2)
+                Ek = P_[:,:i,:]
+                Ev = P_[:,i:,:]
 
-            p_return = [Ek, Ev]
-
+                p_return = [Ek, Ev]
+            else:
+                p_return = None
             p_list_.append(p_return)
         return p_list_
                 
-              
+    
+    def dual_get_t_p_list_(self, input, s_feat, E_K_list, E_P_list, G_P_list):
+
+        with torch.no_grad():
+            x_querry, _ = s_feat(input)
+            x_querry = x_querry[:,0,:]
+        B, C = x_querry.shape
+        prompt_param = self.config['prompt_param']
+        n_tasks = int(prompt_param[0])
+        g_p_length = int(prompt_param[1][2])
+        e_p_length = int(prompt_param[1][1])
+        e_pool_size = int(prompt_param[1][0])
+
+        g_layers = [0,1]
+        e_layers = [2,3,4]
+        topk = 1
+        p_list_ = []
+
+        e_index = 0
+        g_index = 0
+        for l in range(int(self.shared_para['t_depth'])):
+            e_valid = False
+            if l in e_layers:
+                e_valid = True
+                K = E_K_list[e_index]
+                P = E_P_list[e_index]
+                e_index = e_index + 1
+
+                n_K = nn.functional.normalize(K, dim=1)
+                q = nn.functional.normalize(x_querry, dim=1).detach()
+                cos_sim = torch.einsum('bj,kj->bk', q, n_K)
+
+                top_k = torch.topk(cos_sim, topk, dim=1)
+                k_idx = top_k.indices
+                P_ = P[k_idx]
+
+                i = int(e_p_length/2)
+                Ek = P_[:,:,:i,:].reshape((B,-1,self.shared_para['t_embed_dim']))
+                Ev = P_[:,:,i:,:].reshape((B,-1,self.shared_para['t_embed_dim']))
+            
+            g_valid = False
+            if l in g_layers:
+                g_valid = True
+                j = int(g_p_length/2)
+                P = G_P_list[g_index]
+                g_index = g_index + 1
+
+                P_ = P.expand(len(x_querry),-1,-1)
+                Gk = P_[:,:j,:]
+                Gv = P_[:,j:,:]
+            
+            if e_valid and g_valid:
+                Pk = torch.cat((Ek, Gk), dim=1)
+                Pv = torch.cat((Ev, Gv), dim=1)
+                p_return = [Pk, Pv]
+            elif e_valid:
+                p_return = [Ek, Ev]
+            elif g_valid:
+                p_return = [Gk, Gv]
+            else:
+                p_return = None
+            
+            p_list_.append(p_return)
+        
+        return p_list_
+            
+    def l2p_get_t_p_list_(self, input, s_feat, E_K_list, E_P_list, G_P_list):
+        
+        with torch.no_grad():
+            x_querry, _ = s_feat(input)
+            x_querry = x_querry[:,0,:]
+        B, C = x_querry.shape
+        prompt_param = self.config['prompt_param']
+        n_tasks = int(prompt_param[0])
+        g_p_length = -1
+        e_p_length = int(prompt_param[1][1])
+        e_pool_size = int(prompt_param[1][0])
+
+        g_layers = []
+        e_layers = [0]
+        topk = 5
+        p_list_ = []
+
+        e_index = 0
+        g_index = 0        
+        for l in range(int(self.shared_para['t_depth'])):
+            e_valid = False
+            if l in e_layers:
+                e_valid = True
+                K = E_K_list[e_index]
+                P = E_P_list[e_index]
+                e_index = e_index + 1
+
+                n_K = nn.functional.normalize(K, dim=1)
+                q = nn.functional.normalize(x_querry, dim=1).detach()
+                cos_sim = torch.einsum('bj,kj->bk', q, n_K)
+
+                top_k = torch.topk(cos_sim, topk, dim=1)
+                k_idx = top_k.indices
+                P_ = P[k_idx]
+
+                i = int(e_p_length/2)
+                Ek = P_[:,:,:i,:].reshape((B,-1,self.shared_para['t_embed_dim']))
+                Ev = P_[:,:,i:,:].reshape((B,-1,self.shared_para['t_embed_dim']))
+            
+            g_valid = False
+            if l in g_layers:
+                g_valid = True
+                j = int(g_p_length/2)
+                P = G_P_list[g_index]
+                g_index = g_index + 1
+
+                P_ = P.expand(len(x_querry),-1,-1)
+                Gk = P_[:,:j,:]
+                Gv = P_[:,j:,:]
+            
+            if e_valid and g_valid:
+                Pk = torch.cat((Ek, Gk), dim=1)
+                Pv = torch.cat((Ev, Gv), dim=1)
+                p_return = [Pk, Pv]
+            elif e_valid:
+                p_return = [Ek, Ev]
+            elif g_valid:
+                p_return = [Gk, Gv]
+            else:
+                p_return = None
+            
+            p_list_.append(p_return)
+        
+        return p_list_
 
 
 
@@ -295,8 +419,14 @@ class NormalNN(nn.Module):
         s_orig_mode = s_model.training
         s_model.eval()
 
-        K_list, A_list, P_list = model.module.prompt.get_K_A_P()
-        # print("K_list:",K_list[0][10:20])
+        if(self.config['learner_name'] == 'CODAPrompt'):
+            K_list, A_list, P_list = model.module.prompt.get_K_A_P()
+
+        elif(self.config['learner_name'] == 'DualPrompt'):
+            E_K_list, E_P_list, G_P_list = model.module.prompt.get_EK_EP_GP()
+
+        elif(self.config['learner_name'] == 'L2P'):
+            L2P_E_K_list, L2P_E_P_list, L2P_G_P_list = model.module.prompt.get_EK_EP_GP()
 
         s_feat = model.module.s_feat
 
@@ -307,14 +437,20 @@ class NormalNN(nn.Module):
                     input = input.cuda()
                     target = target.cuda()
 
-            # output, _ = model.forward(input)
+            output, _ = model.forward(input)
             # output = output[:, :self.valid_out_dim]
+            if(self.config['learner_name'] == 'CODAPrompt'):
+                p_list_test = self.coda_get_t_p_list_(input, s_feat, K_list, A_list, P_list)
+            elif(self.config['learner_name'] == 'DualPrompt'):
+                p_list_test = self.dual_get_t_p_list_(input, s_feat, E_K_list, E_P_list, G_P_list)
+            elif(self.config['learner_name'] == 'L2P'):
+                p_list_test = self.l2p_get_t_p_list_(input, s_feat, L2P_E_K_list, L2P_E_P_list, L2P_G_P_list)
 
-            p_list_test = self.get_t_p_list_(input, s_feat, K_list, A_list, P_list)
+ 
             s_output = s_model.forward(input, t_p_list_ = p_list_test)[:, :self.valid_out_dim]
 
             #Calculate the accuracy
-            #acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
+            acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
             s_acc = accumulate_acc(s_output, target, task, s_acc, topk=(self.top_k,))
           
             
@@ -322,8 +458,8 @@ class NormalNN(nn.Module):
         s_model.train(s_orig_mode)
 
         if verbal:
-            # self.log(' * Val Teacher Acc {acc.avg:.3f}'
-            #         .format(acc=acc))
+            self.log(' * Val Teacher Acc {acc.avg:.3f}'
+                    .format(acc=acc))
             
             self.log(' * Val Student Acc {acc.avg:.3f}'
                     .format(acc=s_acc))
@@ -331,10 +467,6 @@ class NormalNN(nn.Module):
 
         return acc.avg, s_acc.avg
             
-        # if(t_or_s == 0):
-        #     return acc.avg, p_list_
-        # elif(t_or_s == 1):
-        #     return acc.avg
 
     ##########################################
     #             MODEL UTILS                #
@@ -348,11 +480,20 @@ class NormalNN(nn.Module):
             self.dw_k = self.dw_k.cuda()
 
     def save_model(self, filename):
+        #Saving teacher model
         model_state = self.model.state_dict()
-        for key in model_state.keys():  # Always save it to cpu
+        for key in model_state.keys(): 
             model_state[key] = model_state[key].cpu()
-        self.log('=> Saving class model to:', filename)
-        torch.save(model_state, filename + 'class.pth')
+        self.log('=> Saving Teacher_class model to:', filename)
+        torch.save(model_state, filename + 'T_class.pth')
+        self.log('=> Save Done')
+
+        #Saving student model
+        s_model_state = self.s_model.state_dict()
+        for key in s_model_state.keys(): 
+            s_model_state[key] = s_model_state[key].cpu()
+        self.log('=> Saving Student_class model to:', filename)
+        torch.save(s_model_state, filename + 'S_class.pth')
         self.log('=> Save Done')
 
     def load_model(self, filename):

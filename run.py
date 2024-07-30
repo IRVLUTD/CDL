@@ -14,7 +14,6 @@ from trainer import Trainer
 
 def create_args():
     
-    # This function prepares the variables shared across demo.py
     parser = argparse.ArgumentParser()
 
     # Standard Args
@@ -27,7 +26,7 @@ def create_args():
     parser.add_argument('--learner_name', type=str, default='NormalNN', help="The class name of learner")
     parser.add_argument('--debug_mode', type=int, default=0, metavar='N',
                         help="activate learner specific settings for debug_mode")
-    parser.add_argument('--repeat', type=int, default=1, help="Repeat the experiment N times")
+
     parser.add_argument('--overwrite', type=int, default=0, metavar='N', help='Train regardless of whether saved model exists')
 
     # CL Args          
@@ -92,12 +91,8 @@ if __name__ == '__main__':
 
 
 
-
-
-    # start_r = 0
-
     print('************************************')
-    print('* STARTING TRIAL ' + str(args.random_s))
+    print('* START TRAINING ')
     print('************************************')
 
     # set random seeds
