@@ -94,7 +94,6 @@ class Trainer:
 
 
 
-        # for oracle
       
         self.add_dim = 0
 
@@ -122,7 +121,8 @@ class Trainer:
                         't_model':args.t_model,
                         's_model':args.s_model,
                         'Soft_T': args.Soft_T,
-                        'kd_alpha': args.kd_alpha
+                        'kd_alpha': args.kd_alpha,
+                        'learner_name':args.learner_name,
                         }
         self.learner_type, self.learner_name = args.learner_type, args.learner_name
         self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)
@@ -145,13 +145,13 @@ class Trainer:
 
     def train(self, args):
     
-        # temporary results saving
+        # Results saving
         temp_table = {}
         s_temp_table = {}
         for mkey in self.metric_keys: 
             temp_table[mkey] = []
             s_temp_table[mkey] = []
-        temp_dir = self.log_dir + '/temp/'
+        temp_dir = self.log_dir + '/Results/'
         if not os.path.exists(temp_dir): os.makedirs(temp_dir)
 
         # for each task
@@ -210,12 +210,12 @@ class Trainer:
             # learn
             self.test_dataset.load_dataset(i, train=False)
             test_loader  = DataLoader(self.test_dataset, batch_size=self.batch_size, shuffle=False, drop_last=False, num_workers=self.workers)
-            model_save_dir = self.model_top_dir + '/models/repeat-'+str(self.seed+1)+'/task-'+self.task_names[i]+'/'
+            model_save_dir = self.model_top_dir + '/models/task-'+self.task_names[i]+'/'
             if not os.path.exists(model_save_dir): os.makedirs(model_save_dir)
-            avg_train_time = self.learner.learn_batch(train_loader, self.train_dataset, model_save_dir, args, test_loader)
+            self.learner.learn_batch(train_loader, self.train_dataset, model_save_dir, args, test_loader)
 
-            # save model
-            # self.learner.save_model(model_save_dir)
+            #save model
+            self.learner.save_model(model_save_dir)
             
             # evaluate acc
             acc_table = []

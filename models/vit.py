@@ -208,25 +208,10 @@ class VisionTransformer(nn.Module):
         cls_tokens = self.cls_token.expand(B, -1, -1)  # stole cls_tokens impl from Phil Wang, thanks
         x = torch.cat((cls_tokens, x), dim=1)
  
-
-        # if(self.t_or_s==1):
-        #     kd_tokens = self.kd_token.expand(B, -1, -1)
-        #     x = torch.cat((kd_tokens, x), dim=1)
-
-
-        # if(self.t_or_s==1):
-        #     # kd_tokens = kd_tokens_.expand(B, -1, -1)
-        #     # x = torch.cat((kd_tokens, x), dim=1)
-
-        #     kd_tokens = self.cls_token.expand(B, -1, -1)
-        #     x = torch.cat((kd_tokens, x), dim=1)
-
-
-    
- 
   
         x = x + self.pos_embed[:,:x.size(1),:]
         x = self.pos_drop(x)
+
 
 
         prompt_loss = torch.zeros((1,), requires_grad=True).cuda()
@@ -238,8 +223,6 @@ class VisionTransformer(nn.Module):
         t_corr_list = []
         # s_corr_list = []
 
-        # if (self.t_or_s ==1):
-            #print("Student :t_p_list_:",t_p_list_[0][0][0][1][10])
 
         for i,blk in enumerate(self.blocks):
 
@@ -282,9 +265,7 @@ class VisionTransformer(nn.Module):
         
 
             elif(self.t_or_s==1):
-               
-                if i in [0,1,2,3,4] and (t_p_list_[i] is not None):
-                
+                if(t_p_list_[i] is not None):    
                     t_prompt_k = t_p_list_[i][0].detach().clone()
                     t_prompt_v = t_p_list_[i][1].detach().clone()
 
@@ -324,11 +305,9 @@ class VisionTransformer(nn.Module):
                         t_corr_matrix_ = t_corr_list_[i].detach().clone()
 
                         
-                        #rm_loss = torch.mean((t_corr_matrix_ - s_corr_matrix) ** 2)
                         rm_loss = self.mse_loss(t_corr_matrix_, s_corr_matrix)
                         rm_loss_ += rm_loss
-                        #print("#############rm_loss:",rm_loss)
-                        # s_corr_list.append(s_corr_matrix)
+
                     
                     
                 else:
