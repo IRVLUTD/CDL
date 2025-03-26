@@ -23,7 +23,7 @@ def create_args():
     parser = argparse.ArgumentParser()
 
     # Standard Args
-    parser.add_argument('--random_s', type=int, default=1, help="The random seed")
+    parser.add_argument('--random_s', type=int, default=10, help="The random seed")
     parser.add_argument('--gpuid', nargs="+", type=int, default=[0],
                          help="The list of gpuid, ex:--gpuid 3 1. Negative value means cpu-only")
     parser.add_argument('--log_dir', type=str, default="outputs/out",
@@ -58,6 +58,10 @@ def create_args():
 
     # Config the KD methods
     parser.add_argument('--KD_method', type=str, default='KD', help="The KD methods")
+
+    # Config the kD_prompt parameters
+    parser.add_argument('--kd_prompt_param', nargs=2, type=int, default=[5, 6], help="kd_layers size, kd_prompt_length")
+
 
     return parser
 

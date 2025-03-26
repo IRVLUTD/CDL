@@ -11,7 +11,7 @@ N_CLASS=200
 GPUID='0 1'
 CONFIG=configs/cifar-100_prompt.yaml
 OVERWRITE=0
-RANDOM_SEED=7
+RANDOM_SEED=10
 
 
 # Adjust Model
@@ -23,12 +23,14 @@ CURRENT_TIME=$(date +"%Y%m%d_%H%M%S")
 # Get the KD methods
 KD_METHOD='KD_Token'
 
-# Save directory
+KD_Prompt_Param='12 6'
+
+# # Save directory
 OUTDIR=${CURRENT_TIME}_${T_MODEL}_${S_MODEL}_${RANDOM_SEED}_${DATASET}_${KD_METHOD}/${DATASET}/10-task
 
-###############################################################
+# ###############################################################
 
-mkdir -p $OUTDIR
+# mkdir -p $OUTDIR
 
 # CODA-P
 # prompt parameter args:
@@ -42,7 +44,8 @@ python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
     --t_model $T_MODEL \
     --s_model $S_MODEL \
     --random_s $RANDOM_SEED \
-    --KD_method $KD_METHOD
+    --KD_method $KD_METHOD \
+    --kd_prompt_param $KD_Prompt_Param
 
 
 # DualPrompt
@@ -57,7 +60,8 @@ python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
     --t_model $T_MODEL \
     --s_model $S_MODEL \
     --random_s $RANDOM_SEED \
-    --KD_method $KD_METHOD
+    --KD_method $KD_METHOD \
+    --kd_prompt_param $KD_Prompt_Param
 
 # L2P
 # # prompt parameter args:
@@ -71,7 +75,8 @@ python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
     --t_model $T_MODEL \
     --s_model $S_MODEL \
     --random_s $RANDOM_SEED \
-    --KD_method $KD_METHOD
+    --KD_method $KD_METHOD \
+    --kd_prompt_param $KD_Prompt_Param
 
 
 

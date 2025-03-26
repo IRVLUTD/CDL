@@ -1,6 +1,6 @@
 ##  Continual Distillation Learning
 PyTorch code for the paper:\
-**Continual Distillation Learning: An Empirical Study of Knowledge Distillation in Prompt-based Continual Learning**\
+**Continual Distillation Learning: Knowledge Distillation in Prompt-based Continual Learning**\
 Qifan Zhang, Yunhui Guo, Yu Xiang
 
 [arXiv](https://arxiv.org/abs/2407.13911), [Project](https://irvlutd.github.io/CDL/)
@@ -10,7 +10,7 @@ Qifan Zhang, Yunhui Guo, Yu Xiang
 </p>
 
 ## Abstract
-Knowledge Distillation (KD) focuses on using a teacher model to improve a student model. Traditionally, KD is studied in an offline fashion, where a training dataset is available before learning. In this work, we introduce the problem of Continual Distillation Learning (CDL) that considers KD in the Continual Learning (CL) setup. A teacher model and a student model need to learn a sequence of tasks, and the knowledge of the teacher model will be distilled to the student to improve the student model in an online fashion. The CDL problem is valuable to study since for prompt-based continual learning methods, using a larger vision transformer (ViT) leads to better performance in continual learning. Distilling the knowledge from a large ViT to a small ViT can improve inference efficiency for promptbased CL models. To this end, we conducted experiments to study the CDL problem with three prompt-based CL models, i.e., L2P, DualPrompt and CODA-Prompt, where we utilized logit distillation, feature distillation and prompt distillation for knowledge distillation from a teacher model to a student model. Our findings of this study can serve as baselines for future CDL work.
+We introduce the problem of continual distillation learning (CDL) in order to use knowledge distillation (KD) to improve prompt-based continual learning (CL) models. The CDL problem is valuable to study since the use of a larger vision transformer (ViT) leads to better performance in prompt-based continual learning. The distillation of knowledge from a large ViT to a small ViT can improve the inference efficiency for prompt-based CL models. We empirically found that existing KD methods such as logit distillation and feature distillation cannot effectively improve the student model in the CDL setup. To this end, we introduce a novel method named Knowledge Distillation based on Prompts (KDP), in which globally accessible prompts specifically designed for knowledge distillation are inserted into the frozen ViT backbone of the student model. We demonstrate that our KDP method effectively enhances the distillation performance in comparison to existing KD methods in the CDL setup.
 
 
 ## Setup
@@ -43,22 +43,21 @@ Knowledge Distillation (KD) focuses on using a teacher model to improve a studen
 **The scripts are set up for 2 GPUs** but can be modified for your hardware. You can directly run the run.py and test on ImageNet-R dataset:
 
 ```bash
-# prompt parameter args:
-#    arg 1 = prompt component pool size
-#    arg 2 = prompt length
-#    arg 3 = ortho penalty loss weight
-python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
+python -u run.py --config configs/imnet-r_prompt.yaml --gpuid '0 1' \
     --learner_type prompt --learner_name CODAPrompt \
     --prompt_param 100 8 0.0 \
-    --log_dir ${OUTDIR}/coda-p \
-    --t_model $T_MODEL \
-    --s_model $S_MODEL \
-    --KD_method $KD_METHOD
+    --log_dir ImageNet_R/coda-p \
+    --t_model 'vit_base_patch16_224' \
+    --s_model 'vit_small_patch16_224' \
+    --KD_method 'KD_Token' \
+    --kd_prompt_param '12 6'
 ```
-
-* You can change the learner_name for DualPrompt or L2P.(And change the prompt_param for different learner. Check the experiments/imagenet-r.sh and experiments/cifar-100.sh.
+* Check the experiments/imagenet-r.sh and experiments/cifar-100.sh to see the details.
+* You can change the learner_name for DualPrompt or L2P.
+* Change the prompt_param for different learner(CODA, DualPrompt or L2P)
 * You can adjust the teacher and student's model with --t_model and --s_model.
-* Change the --KD_method for different knowledage distillation methods -> ['KD_Token', 'KD', 'DKD', 'FitNets', 'ReviewKD']
+* Change the --KD_method for different knowledage distillation methods -> ['KD_Token', 'KD', 'DKD', 'FitNets', 'ReviewKD']. Use the 'KD_Token' for our ***KDP*** model.
+* Change the --kd_prompt_param for our ***KDP*** model (kd_layers size, kd_prompt_length).
 
 
 ## Results

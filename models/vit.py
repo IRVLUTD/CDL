@@ -61,7 +61,7 @@ class Attention(nn.Module):
     def get_attention_map(self):
         return self.attention_map
     
-    def forward(self, x, register_hook=False, prompt=None, t_prompt=None):
+    def forward(self, x, register_hook=False, prompt=None, t_prompt=None, kd_prompt=None):
         B, N, C = x.shape
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
@@ -72,6 +72,12 @@ class Attention(nn.Module):
             pv = pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
             k = torch.cat((pk,k), dim=2)
             v = torch.cat((pv,v), dim=2)
+        if kd_prompt is not None:
+            kd_pk, kd_pv = kd_prompt
+            kd_pk = kd_pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+            kd_pv = kd_pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+            k = torch.cat((k,kd_pk), dim=2)
+            v = torch.cat((v,kd_pv), dim=2)
 
         attn = (q @ k.transpose(-2, -1)) * self.scale
         attn = attn.softmax(dim=-1)
@@ -102,8 +108,8 @@ class Block(nn.Module):
         self.mlp = Mlp(in_features=dim, hidden_features=mlp_hidden_dim, act_layer=act_layer, drop=drop)
 
 
-    def forward(self, x, register_hook=False, prompt=None, t_prompt=None):
-        x = x + self.drop_path(self.attn(self.norm1(x), register_hook=register_hook, prompt=prompt, t_prompt=t_prompt))
+    def forward(self, x, register_hook=False, prompt=None, t_prompt=None, kd_prompt=None):
+        x = x + self.drop_path(self.attn(self.norm1(x), register_hook=register_hook, prompt=prompt, t_prompt=t_prompt, kd_prompt=kd_prompt))
         x = x + self.drop_path(self.mlp(self.norm2(x)))
         return x
 
@@ -151,8 +157,8 @@ class VisionTransformer(nn.Module):
 
         self.cls_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
 
-        if(t_or_s ==1):
-            self.add_T_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
+        # if(t_or_s ==1):
+        #     self.add_T_token = nn.Parameter(torch.zeros(1, 1, embed_dim))
 
 
         self.pos_embed = nn.Parameter(torch.zeros(1, num_patches + 1, embed_dim))
@@ -184,7 +190,7 @@ class VisionTransformer(nn.Module):
     def no_weight_decay(self):
         return {'pos_embed', 'cls_token'}
 
-    def forward(self, x, register_blk=-1, prompt=None, q=None, train=False, task_id=None, t_p_list_=None, project_fc_layers=None, project_t_s=None, t_corr_list_=None, kd_tokens_=None, KD_method=None):
+    def forward(self, x, register_blk=-1, prompt=None, kd_prompt=None, q=None, train=False, task_id=None, t_p_list_=None, project_fc_layers=None, project_t_s=None, t_corr_list_=None, kd_tokens_=None, KD_method=None):
         B = x.shape[0]
         x = self.patch_embed(x)
 
@@ -229,6 +235,10 @@ class VisionTransformer(nn.Module):
                 
             else:
                 p_list = None
+
+
+
+
 
             if(self.t_or_s==0):
                 p_list_.append(p_list)
@@ -275,11 +285,17 @@ class VisionTransformer(nn.Module):
                         t_corr_matrix_ = t_corr_list_[i].detach().clone()
 
                 else:
-                    if(i==0):
-                        if KD_method == 'KD_Token':
-                            add_T_token = self.add_T_token.expand(B, -1, -1)
-                            x = torch.cat((add_T_token, x), dim=1)
-                    x = blk(x, register_blk==i, prompt=p_list)
+       
+                    if KD_method == 'KD_Token':
+                        if(i==0):
+                            G_kd,E_kd_list, x = kd_prompt.forward(i, x)
+                            x = torch.cat((x,G_kd), dim=1)
+                        else:
+                            _, E_kd_list, x = kd_prompt.forward(i, x)
+                    else:
+                        E_kd_list = None
+
+                    x = blk(x, register_blk==i, prompt=p_list, kd_prompt=E_kd_list)
 
                     if KD_method == 'ReviewKD':
                         s_features_list.append(x.clone().unsqueeze(1))
@@ -296,7 +312,6 @@ class VisionTransformer(nn.Module):
             return x, prompt_loss, p_list_, t_corr_list, t_features_list
 
         elif(self.t_or_s ==1):
-            #rm_loss_ = torch.zeros((1,), requires_grad=True).cuda()
             return x, prompt_loss, prompt_loss_, s_features_list
         
         return x, prompt_loss

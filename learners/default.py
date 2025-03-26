@@ -34,6 +34,8 @@ class NormalNN(nn.Module):
         self.s_model_name = learner_config['s_model']
         self.KD_method = learner_config['KD_method']
         self.kd_alpha = learner_config['kd_alpha']
+        self.kd_prompt_param = learner_config['kd_prompt_param']
+
 
 
         if self.s_model_name == 'vit_base_patch16_224':
@@ -86,6 +88,7 @@ class NormalNN(nn.Module):
                         's_num_heads': s_num_heads,
                         'KD_method': self.KD_method,
                         'kd_alpha': self.kd_alpha,
+                        'kd_prompt_param': self.kd_prompt_param
                         }
 
         self.model, self.s_model = self.create_model(self.t_model_name,self.s_model_name,self.shared_para)

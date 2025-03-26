@@ -24,6 +24,76 @@ timm_models = importlib.import_module('timm.models')
 
 
 
+
+
+
+
+
+class KD_Prompt(nn.Module):
+    def __init__(self, emb_d, kd_prompt_param):
+        super().__init__()
+        self.emb_d = emb_d
+        self._init_smart(kd_prompt_param)
+
+        # prompt init
+        for kd in self.kd_layers:
+            if kd ==0:
+                p = tensor_prompt(1, emb_d)
+            else:
+                p = tensor_prompt(self.kd_p_length, emb_d)
+            setattr(self, f'kd_p_{kd}',p)
+
+
+
+    def _init_smart(self, kd_prompt_param):
+        self.kd_layers = []
+        kd_layers_length, self.kd_p_length = kd_prompt_param
+
+        # kd_prompt locations
+        for i in range(kd_layers_length):
+            self.kd_layers.append(i)
+
+
+    def forward(self, l, x_block, train=False, task_id=None, t_or_s = None):
+
+
+
+ 
+        if l in self.kd_layers:
+            if l ==0:
+                kd_p = getattr(self,f'kd_p_{l}')
+                G_kd = kd_p.expand(len(x_block),-1,-1)
+                E_kd_list = None
+            else:
+                kd_p = getattr(self,f'kd_p_{l}')
+                E_kd = kd_p.expand(len(x_block),-1,-1)
+                i = int(self.kd_p_length/2)
+                E_kd_k = E_kd[:,:i,:]
+                E_kd_v = E_kd[:,i:,:]
+                G_kd = None
+                E_kd_list = [E_kd_k, E_kd_v]
+        else:
+            G_kd, E_kd_list = None, None
+        
+        return G_kd, E_kd_list, x_block
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class ABF(nn.Module):
     def __init__(self, fuse, student_dim, teacher_dim):
         super(ABF, self).__init__()
@@ -392,7 +462,6 @@ class DualPrompt(nn.Module):
             n_K = nn.functional.normalize(K, dim=1)
             q = nn.functional.normalize(x_querry, dim=1).detach()
             cos_sim = torch.einsum('bj,kj->bk', q, n_K)
-
             
             if train:
                 # dual prompt during training uses task id
@@ -578,6 +647,11 @@ class ViTZoo(nn.Module):
             self.prompt = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
         else:
             self.prompt = None
+
+        if self.shared_para['KD_method'] == 'KD_Token' :
+            self.kd_prompt = KD_Prompt(embed_dim, self.shared_para['kd_prompt_param'])
+        else:
+            self.kd_prompt = None
         
         # Set feature encoder
         self.feat = zoo_model
@@ -623,13 +697,14 @@ class ViTZoo(nn.Module):
             
             elif(self.t_or_s==1):
              
-                out, prompt_loss, prompt_loss_, s_features_list= self.feat(x, prompt=self.prompt,q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, t_corr_list_=t_corr_list_, KD_method=self.shared_para['KD_method'])
+                out, prompt_loss, prompt_loss_, s_features_list= self.feat(x, prompt=self.prompt, kd_prompt=self.kd_prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, t_corr_list_=t_corr_list_, KD_method=self.shared_para['KD_method'])
                 
                 try:
                     if self.shared_para['KD_method'] == 'KD_Token' :
-                        kd_out = out[:,0,:]
+
+                        kd_out = out[:,-1,:]
+                        ori_out = out[:,0,:]
                         kd_out = kd_out.view(kd_out.size(0), -1)
-                        ori_out = out[:,1,:]
                         ori_out = ori_out.view(ori_out.size(0), -1)
 
                         ori_out = self.last(ori_out)

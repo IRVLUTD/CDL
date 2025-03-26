@@ -201,7 +201,7 @@ class Prompt(NormalNN):
 
         if len(self.config['gpuid']) > 1:
             if self.config['KD_method'] == 'KD_Token' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())  + list(self.s_model.module.kd_last.parameters()) + [self.s_model.module.feat.add_T_token]
+                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())  + list(self.s_model.module.kd_last.parameters()) + list(self.s_model.module.kd_prompt.parameters())
             elif self.config['KD_method'] == 'KD' :
                 s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) 
             elif self.config['KD_method'] == 'DKD' :
@@ -212,7 +212,7 @@ class Prompt(NormalNN):
                 s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) + list(self.s_model.module.ReviewKD_layers.parameters())
         else:
             if self.config['KD_method'] == 'KD_Token' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.kd_last.parameters()) + [self.s_model.feat.add_T_token]
+                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.kd_last.parameters()) + list(self.s_model.kd_prompt.parameters())
             elif self.config['KD_method'] == 'KD' :
                 s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters())
             elif self.config['KD_method'] == 'DKD' :
