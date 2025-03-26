@@ -43,14 +43,14 @@ We introduce the problem of continual distillation learning (CDL) in order to us
 **The scripts are set up for 2 GPUs** but can be modified for your hardware. You can directly run the run.py and test on ImageNet-R dataset:
 
 ```bash
-python -u run.py --config configs/imnet-r_prompt.yaml --gpuid '0 1' \
+python -u run.py --config configs/imnet-r_prompt.yaml --gpuid 0 1 \
     --learner_type prompt --learner_name CODAPrompt \
     --prompt_param 100 8 0.0 \
     --log_dir ImageNet_R/coda-p \
     --t_model 'vit_base_patch16_224' \
     --s_model 'vit_small_patch16_224' \
     --KD_method 'KD_Token' \
-    --kd_prompt_param '12 6'
+    --kd_prompt_param 12 6
 ```
 * Check the experiments/imagenet-r.sh and experiments/cifar-100.sh to see the details.
 * You can change the learner_name for DualPrompt or L2P.

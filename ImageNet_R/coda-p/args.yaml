@@ -1,0 +1,44 @@
+DW: false
+KD_method: KD_Token
+Soft_T: 2.0
+batch_size: 64
+config: configs/imnet-r_prompt.yaml
+dataroot: data
+dataset: ImageNet_R
+debug_mode: 0
+first_split_size: 20
+gpuid:
+- 0
+- 1
+kd_alpha: 0.5
+kd_prompt_param:
+- 12
+- 6
+learner_name: CODAPrompt
+learner_type: prompt
+log_dir: ImageNet_R/coda-p
+lr: 0.001
+max_task: -1
+memory: 0
+model_name: vit_pt_imnet
+model_type: zoo
+momentum: 0.9
+optimizer: Adam
+other_split_size: 20
+overwrite: 0
+prompt_param:
+- 100.0
+- 8.0
+- 0.0
+rand_split: true
+random_s: 10
+s_model: vit_small_patch16_224
+schedule:
+- 35
+schedule_type: cosine
+t_model: vit_base_patch16_224
+train_aug: true
+upper_bound_flag: false
+validation: false
+weight_decay: 0
+workers: 4
