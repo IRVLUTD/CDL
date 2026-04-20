@@ -129,7 +129,8 @@ class Trainer:
                         'kd_alpha': args.kd_alpha,
                         'learner_name':args.learner_name,
                         'KD_method': args.KD_method,
-                        'kd_prompt_param':args.kd_prompt_param
+                        'kd_prompt_param':args.kd_prompt_param,
+                        'ema_coeff': args.ema_coeff
                         }
         self.learner_type, self.learner_name = args.learner_type, args.learner_name
         self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)

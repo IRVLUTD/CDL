@@ -66,12 +66,35 @@ class Attention(nn.Module):
         qkv = self.qkv(x).reshape(B, N, 3, self.num_heads, C // self.num_heads).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
 
+        head_dim = C // self.num_heads
+
+
         if prompt is not None:
             pk, pv = prompt
-            pk = pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
-            pv = pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
-            k = torch.cat((pk,k), dim=2)
-            v = torch.cat((pv,v), dim=2)
+
+            # APT branch:
+            # pk/pv already have shape [B, num_heads, N, head_dim]
+            if pk.dim() == 4 and pv.dim() == 4:
+                # k[:, :, 0:1, :] = k[:, :, 0:1, :] + pk[:, :, 0:1, :]
+                # v[:, :, 0:1, :] = v[:, :, 0:1, :] + pv[:, :, 0:1, :]
+                k[:,:,0:1] = k[:,:,0:1] + pk[:,:,0:1]
+                v[:,:,0:1] = v[:,:,0:1] + pv[:,:,0:1]
+                #print("###############APT")
+            # Original prompt branch:
+            # pk/pv have shape [B, prompt_len, C]
+            else:
+                pk = pk.reshape(B, -1, self.num_heads, head_dim).permute(0, 2, 1, 3)
+                pv = pv.reshape(B, -1, self.num_heads, head_dim).permute(0, 2, 1, 3)
+                k = torch.cat((pk, k), dim=2)
+                v = torch.cat((pv, v), dim=2)
+                #print("+++++++++++++++Others")
+
+        # if prompt is not None:
+        #     pk, pv = prompt
+        #     pk = pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+        #     pv = pv.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
+        #     k = torch.cat((pk,k), dim=2)
+        #     v = torch.cat((pv,v), dim=2)
         if kd_prompt is not None:
             kd_pk, kd_pv = kd_prompt
             kd_pk = kd_pk.reshape(B, -1, self.num_heads, C // self.num_heads).permute(0, 2, 1, 3)
@@ -222,21 +245,55 @@ class VisionTransformer(nn.Module):
 
         for i,blk in enumerate(self.blocks):
 
-            if prompt is not None:
-                if train:
-                    if(self.t_or_s ==0):
-                        p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s =self.t_or_s)
-                        prompt_loss += loss
-                    elif(self.t_or_s ==1):
-                        p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s =self.t_or_s)
-                        prompt_loss += loss
-                else:
-                    p_list, _, x = prompt.forward(q, i, x, train=False, task_id=task_id)
+            # if prompt is not None:
+            #     if train:
+            #         if(self.t_or_s ==0):
+            #             p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s =self.t_or_s)
+            #             prompt_loss += loss
+            #         elif(self.t_or_s ==1):
+            #             p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s =self.t_or_s)
+            #             prompt_loss += loss
+            #     else:
+            #         p_list, _, x = prompt.forward(q, i, x, train=False, task_id=task_id)
                 
+            # else:
+            #     p_list = None
+
+            # if prompt is not None:
+            #     if self.prompt_flag == 'apt':
+            #         if train:
+            #             p_list = prompt.forward(i, x, train=True)
+            #         else:
+            #             p_list = prompt.forward(i, x, train=False)
+            #     else:
+            #         if train:
+            #             if(self.t_or_s ==0):
+            #                 p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s=self.t_or_s)
+            #                 prompt_loss += loss
+            #             elif(self.t_or_s ==1):
+            #                 p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s=self.t_or_s)
+            #                 prompt_loss += loss
+            #         else:
+            #             p_list, _, x = prompt.forward(q, i, x, train=False, task_id=task_id)
+            # else:
+            #     p_list = None
+
+
+            if prompt is not None:
+                if self.prompt_flag == 'apt':
+                    p_list = prompt.forward(i, x, train=train)
+                else:
+                    if train:
+                        if(self.t_or_s == 0):
+                            p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s=self.t_or_s)
+                            prompt_loss += loss
+                        elif(self.t_or_s == 1):
+                            p_list, loss, x = prompt.forward(q, i, x, train=True, task_id=task_id, t_or_s=self.t_or_s)
+                            prompt_loss += loss
+                    else:
+                        p_list, _, x = prompt.forward(q, i, x, train=False, task_id=task_id)
             else:
                 p_list = None
-
-
 
 
 

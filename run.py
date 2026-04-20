@@ -62,6 +62,9 @@ def create_args():
     # Config the kD_prompt parameters
     parser.add_argument('--kd_prompt_param', nargs=2, type=int, default=[5, 6], help="kd_layers size, kd_prompt_length")
 
+    # Config the APT parameters
+    parser.add_argument('--ema_coeff', type=float, default=0.5,
+                    help="EMA coefficient for APT prompt merging")
 
     return parser
 

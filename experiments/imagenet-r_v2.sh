@@ -11,12 +11,11 @@ N_CLASS=200
 GPUID='0 1'
 CONFIG=configs/imnet-r_prompt.yaml
 OVERWRITE=0
-RANDOM_SEED=72
+RANDOM_SEED=66
 
 
 # Adjust Model
 T_MODEL='vit_base_patch16_224'
-#T_MODEL='vit_small_patch16_224'
 S_MODEL='vit_small_patch16_224'
 
 # T_MODEL='vit_large_patch16_224'
@@ -31,7 +30,6 @@ KD_METHOD='KD'
 # KD_METHOD='FitNets'
 # Get the KD_Prompt parameters (kd_layers size, kd_prompt_length)
 KD_Prompt_Param='12 6'
-KD_ALPHA=0.5
 
 # APT parameters
 APT_PROMPT_DROPOUT='0.01'
@@ -39,11 +37,11 @@ EMA_COEFF='0.7'
 
 
 # Save directory
-OUTDIR=new85/${CURRENT_TIME}_${T_MODEL}_${S_MODEL}_${RANDOM_SEED}_${DATASET}_${KD_METHOD}_${KD_ALPHA}_mergeafterTask/${DATASET}/10-task
+OUTDIR=new85/${CURRENT_TIME}_${T_MODEL}_${S_MODEL}_${RANDOM_SEED}_${DATASET}_${KD_METHOD}/${DATASET}/10-task
 
 ###############################################################
 
-# mkdir -p $OUTDIR
+mkdir -p $OUTDIR
 
 # APT
 # prompt parameter args:
@@ -57,36 +55,8 @@ python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
     --s_model $S_MODEL \
     --random_s $RANDOM_SEED \
     --KD_method $KD_METHOD \
-    --kd_prompt_param $KD_Prompt_Param \
-    --kd_alpha $KD_ALPHA
+    --kd_prompt_param $KD_Prompt_Param
 
-RANDOM_SEED=73
-OUTDIR=new85/${CURRENT_TIME}_${T_MODEL}_${S_MODEL}_${RANDOM_SEED}_${DATASET}_${KD_METHOD}_${KD_ALPHA}_mergeafterTask/${DATASET}/10-task
-python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
-    --learner_type prompt --learner_name APT \
-    --prompt_param $APT_PROMPT_DROPOUT \
-    --ema_coeff $EMA_COEFF \
-    --log_dir ${OUTDIR}/apt \
-    --t_model $T_MODEL \
-    --s_model $S_MODEL \
-    --random_s $RANDOM_SEED \
-    --KD_method $KD_METHOD \
-    --kd_prompt_param $KD_Prompt_Param \
-    --kd_alpha $KD_ALPHA
-
-RANDOM_SEED=75
-OUTDIR=new85/${CURRENT_TIME}_${T_MODEL}_${S_MODEL}_${RANDOM_SEED}_${DATASET}_${KD_METHOD}_${KD_ALPHA}_mergeafterTask/${DATASET}/10-task
-python -u run.py --config $CONFIG --gpuid $GPUID --overwrite $OVERWRITE \
-    --learner_type prompt --learner_name APT \
-    --prompt_param $APT_PROMPT_DROPOUT \
-    --ema_coeff $EMA_COEFF \
-    --log_dir ${OUTDIR}/apt \
-    --t_model $T_MODEL \
-    --s_model $S_MODEL \
-    --random_s $RANDOM_SEED \
-    --KD_method $KD_METHOD \
-    --kd_prompt_param $KD_Prompt_Param \
-    --kd_alpha $KD_ALPHA
 
 # # CODA-P
 # # prompt parameter args:

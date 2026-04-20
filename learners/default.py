@@ -36,7 +36,7 @@ class NormalNN(nn.Module):
         self.kd_alpha = learner_config['kd_alpha']
         self.kd_prompt_param = learner_config['kd_prompt_param']
 
-
+        self.ema_coeff = learner_config['ema_coeff']
 
         if self.s_model_name == 'vit_base_patch16_224':
             s_embed_dim = 768
@@ -88,7 +88,8 @@ class NormalNN(nn.Module):
                         's_num_heads': s_num_heads,
                         'KD_method': self.KD_method,
                         'kd_alpha': self.kd_alpha,
-                        'kd_prompt_param': self.kd_prompt_param
+                        'kd_prompt_param': self.kd_prompt_param,
+                        'ema_coeff': self.config['ema_coeff']
                         }
 
         self.model, self.s_model = self.create_model(self.t_model_name,self.s_model_name,self.shared_para)
@@ -199,7 +200,7 @@ class NormalNN(nn.Module):
                 losses = AverageMeter()
                 acc = AverageMeter()
             
-
+            #self._apt_merge_backbone(self.model)
 
             # Train the Student part
             for epoch in range(self.config['schedule'][-1]):
@@ -220,10 +221,22 @@ class NormalNN(nn.Module):
                         y = y.cuda()
                     
                     # model update
-                    t_output, p_list_, t_corr_list_, t_features_list = self.model.forward(x)
-                    logits = t_output[:,:self.valid_out_dim]
-                    cur_logits = logits[:,self.last_valid_out_dim:self.valid_out_dim]
-                    s_loss, soft_loss, soft_loss_cur, soft_loss_pre, prompt_loss_, hint_loss_all, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_, t_features_list)
+                    # t_output, p_list_, t_corr_list_, t_features_list = self.model.forward(x)
+                    # logits = t_output[:,:self.valid_out_dim]
+                    # cur_logits = logits[:,self.last_valid_out_dim:self.valid_out_dim]
+                    # s_loss, soft_loss, soft_loss_cur, soft_loss_pre, prompt_loss_, hint_loss_all, s_output= self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_, t_features_list)
+
+                    # model update
+                    with torch.no_grad():
+                        t_output, p_list_, t_corr_list_, t_features_list = self.model.forward(x, train=False)
+                        #t_output, _, p_list_, t_corr_list_, t_features_list = self.model.forward(x, train=True)
+
+                    logits = t_output[:, :self.valid_out_dim]
+                    cur_logits = logits[:, self.last_valid_out_dim:self.valid_out_dim]
+
+                    s_loss, soft_loss, soft_loss_cur, soft_loss_pre, prompt_loss_, hint_loss_all, s_output = \
+                        self.s_update_model(x, y, cur_logits, p_list_, t_corr_list_, t_features_list)
+
 
                     # measure accuracy and record loss
                     y = y.detach()
@@ -241,7 +254,10 @@ class NormalNN(nn.Module):
                 soft_losses = AverageMeter()
                 s_acc = AverageMeter()
                 hint_losses = AverageMeter()
-                
+
+        self._apt_merge_backbone(self.model)
+        self._apt_merge_backbone(self.s_model)
+
         self.model.eval()
         self.s_model.eval()
 
@@ -252,6 +268,28 @@ class NormalNN(nn.Module):
         self.task_count += 1
         if self.memory_size > 0:
             train_dataset.update_coreset(self.memory_size, np.arange(self.last_valid_out_dim))
+
+
+    def _apt_merge_backbone(self, model):
+        if isinstance(model, torch.nn.DataParallel):
+            model_ref = model.module
+        else:
+            model_ref = model
+
+        if not hasattr(model_ref, 'prompt') or model_ref.prompt is None:
+            return
+
+        if not hasattr(model_ref.prompt, 'merge_flag'):
+            return
+
+        if model_ref.prompt.merge_flag:
+            if self.last_valid_out_dim == 0:
+                model_ref.prompt.global_merged_prompt.data = model_ref.prompt.prompt_tokens.clone().detach()
+            else:
+                now_task_p = model_ref.prompt.prompt_tokens.clone().detach()
+                global_p = model_ref.prompt.global_merged_prompt
+                merged_p = model_ref.prompt.merge_prompt(global_p, now_task_p)
+                model_ref.prompt.global_merged_prompt.data = merged_p
 
 
     def criterion(self, logits, targets, data_weights):

@@ -170,10 +170,37 @@ class Prompt(NormalNN):
 
         # parse optimizer args
         # Multi-GPU
+        # if len(self.config['gpuid']) > 1:
+        #     params_to_opt = list(self.model.module.prompt.parameters()) + list(self.model.module.last.parameters())
+        # else:
+        #     params_to_opt = list(self.model.prompt.parameters()) + list(self.model.last.parameters())
+
         if len(self.config['gpuid']) > 1:
-            params_to_opt = list(self.model.module.prompt.parameters()) + list(self.model.module.last.parameters())
+            if self.model.module.prompt_flag == 'apt':
+                params_to_opt = (
+                    list(self.model.module.prompt.parameters()) +
+                    list(self.model.module.last.parameters()) 
+                    # list(self.model.module.clf_norm.parameters())
+                )
+            else:
+                params_to_opt = (
+                    list(self.model.module.prompt.parameters()) +
+                    list(self.model.module.last.parameters())
+                )
         else:
-            params_to_opt = list(self.model.prompt.parameters()) + list(self.model.last.parameters())
+            if self.model.prompt_flag == 'apt':
+                params_to_opt = (
+                    list(self.model.prompt.parameters()) +
+                    list(self.model.last.parameters())
+                    # list(self.model.clf_norm.parameters())
+                )
+            else:
+                params_to_opt = (
+                    list(self.model.prompt.parameters()) +
+                    list(self.model.last.parameters())
+                )
+
+
         print('*****************************************')
         optimizer_arg = {'params':params_to_opt,
                          'lr':self.config['lr'],
@@ -199,28 +226,182 @@ class Prompt(NormalNN):
 
 
 
+        # if len(self.config['gpuid']) > 1:
+        #     if self.config['KD_method'] == 'KD_Token' :
+        #         s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())  + list(self.s_model.module.kd_last.parameters()) + list(self.s_model.module.kd_prompt.parameters())
+        #     elif self.config['KD_method'] == 'KD' :
+        #         s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) 
+        #     elif self.config['KD_method'] == 'DKD' :
+        #         s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())
+        #     elif self.config['KD_method'] == 'FitNets' :
+        #         s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) + list(self.s_model.module.project_t_s.parameters())
+        #     elif self.config['KD_method'] == 'ReviewKD' :
+        #         s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) + list(self.s_model.module.ReviewKD_layers.parameters())
+        # else:
+        #     if self.config['KD_method'] == 'KD_Token' :
+        #         s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.kd_last.parameters()) + list(self.s_model.kd_prompt.parameters())
+        #     elif self.config['KD_method'] == 'KD' :
+        #         s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters())
+        #     elif self.config['KD_method'] == 'DKD' :
+        #         s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters())
+        #     elif self.config['KD_method'] == 'FitNets' :
+        #         s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.project_t_s.parameters())
+        #     elif self.config['KD_method'] == 'ReviewKD' :
+        #         s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.ReviewKD_layers.parameters())
+
+
         if len(self.config['gpuid']) > 1:
-            if self.config['KD_method'] == 'KD_Token' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())  + list(self.s_model.module.kd_last.parameters()) + list(self.s_model.module.kd_prompt.parameters())
-            elif self.config['KD_method'] == 'KD' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) 
-            elif self.config['KD_method'] == 'DKD' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters())
-            elif self.config['KD_method'] == 'FitNets' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) + list(self.s_model.module.project_t_s.parameters())
-            elif self.config['KD_method'] == 'ReviewKD' :
-                s_params_to_opt = list(self.s_model.module.prompt.parameters()) + list(self.s_model.module.last.parameters()) + list(self.s_model.module.ReviewKD_layers.parameters())
+            if self.config['KD_method'] == 'KD_Token':
+                if self.s_model.module.prompt_flag == 'apt':
+                    print("Usinnnnnnnnnnnnnnng apt")
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        # list(self.s_model.module.clf_norm.parameters()) +
+                        list(self.s_model.module.kd_last.parameters()) +
+                        list(self.s_model.module.kd_prompt.parameters())
+                        # list(self.s_model.module.kd_cls_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        list(self.s_model.module.kd_last.parameters()) +
+                        list(self.s_model.module.kd_prompt.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'KD':
+                if self.s_model.module.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) 
+                        # list(self.s_model.module.clf_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'DKD':
+                if self.s_model.module.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) 
+                        # list(self.s_model.module.clf_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'FitNets':
+                if self.s_model.module.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        # list(self.s_model.module.clf_norm.parameters()) +
+                        list(self.s_model.module.project_t_s.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        list(self.s_model.module.project_t_s.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'ReviewKD':
+                if self.s_model.module.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        # list(self.s_model.module.clf_norm.parameters()) +
+                        list(self.s_model.module.ReviewKD_layers.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.module.prompt.parameters()) +
+                        list(self.s_model.module.last.parameters()) +
+                        list(self.s_model.module.ReviewKD_layers.parameters())
+                    )
+
         else:
-            if self.config['KD_method'] == 'KD_Token' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.kd_last.parameters()) + list(self.s_model.kd_prompt.parameters())
-            elif self.config['KD_method'] == 'KD' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters())
-            elif self.config['KD_method'] == 'DKD' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters())
-            elif self.config['KD_method'] == 'FitNets' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.project_t_s.parameters())
-            elif self.config['KD_method'] == 'ReviewKD' :
-                s_params_to_opt = list(self.s_model.prompt.parameters()) + list(self.s_model.last.parameters()) + list(self.s_model.ReviewKD_layers.parameters())
+            if self.config['KD_method'] == 'KD_Token':
+                if self.s_model.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        # list(self.s_model.clf_norm.parameters()) +
+                        list(self.s_model.kd_last.parameters()) +
+                        list(self.s_model.kd_prompt.parameters())
+                        # list(self.s_model.kd_cls_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        list(self.s_model.kd_last.parameters()) +
+                        list(self.s_model.kd_prompt.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'KD':
+                if self.s_model.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) 
+                        # list(self.s_model.clf_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'DKD':
+                if self.s_model.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) 
+                        # list(self.s_model.clf_norm.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'FitNets':
+                if self.s_model.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        # list(self.s_model.clf_norm.parameters()) +
+                        list(self.s_model.project_t_s.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        list(self.s_model.project_t_s.parameters())
+                    )
+
+            elif self.config['KD_method'] == 'ReviewKD':
+                if self.s_model.prompt_flag == 'apt':
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        # list(self.s_model.clf_norm.parameters()) +
+                        list(self.s_model.ReviewKD_layers.parameters())
+                    )
+                else:
+                    s_params_to_opt = (
+                        list(self.s_model.prompt.parameters()) +
+                        list(self.s_model.last.parameters()) +
+                        list(self.s_model.ReviewKD_layers.parameters())
+                    )
+
+       
             
         print('*****************************************')
         s_optimizer_arg = {'params':s_params_to_opt,
@@ -306,7 +487,35 @@ class L2P(Prompt):
         t_model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](out_dim=self.out_dim, prompt_flag = 'l2p',prompt_param=self.prompt_param, vit_model=t_model_name, shared_para=shared_para, t_or_s=0)
         s_model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](out_dim=self.out_dim, prompt_flag = 'l2p',prompt_param=self.prompt_param, vit_model=s_model_name, shared_para=shared_para, t_or_s=1)
         return t_model, s_model
-    
+  
 ########
 ### Can add more promot_based model
 ########
+
+
+class APT(Prompt):
+    def __init__(self, learner_config):
+        super(APT, self).__init__(learner_config)
+
+    def create_model(self, t_model_name, s_model_name, shared_para):
+        cfg = self.config
+
+        teacher_model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](
+            out_dim=self.out_dim,
+            prompt_flag='apt',
+            prompt_param=self.prompt_param,
+            vit_model=t_model_name,
+            shared_para=shared_para,
+            t_or_s=0
+        )
+
+        student_model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](
+            out_dim=self.out_dim,
+            prompt_flag='apt',
+            prompt_param=self.prompt_param,
+            vit_model=s_model_name,
+            shared_para=shared_para,
+            t_or_s=1
+        )
+
+        return teacher_model, student_model

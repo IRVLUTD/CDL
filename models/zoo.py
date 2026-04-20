@@ -577,6 +577,168 @@ def tensor_prompt(a, b, c=None, ortho=False):
         nn.init.uniform_(p)
     return p    
 
+
+# class APTPrompt(nn.Module):
+#     def __init__(self, emb_d, depth, num_heads, prompt_param, ema_coeff=0.5):
+#         super().__init__()
+#         self.task_count = 0
+#         self.emb_d = emb_d
+#         self.depth = depth
+#         self.num_heads = num_heads
+#         self.head_dim = emb_d // num_heads
+#         self.ema_coeff = ema_coeff
+#         self.merge_flag = True
+
+#         self.prompt_dropout_ratio = float(prompt_param[0])
+#         self.prompt_dropout = nn.Dropout(self.prompt_dropout_ratio)
+
+#         # 2 prompts per layer: one for K, one for V
+#         # self.prompt_tokens = nn.Parameter(torch.empty(depth * 2, emb_d))
+#         # nn.init.uniform_(self.prompt_tokens)
+#         self.prompt_tokens = create_prompt_with_init(depth * 2, emb_d)
+
+#         self.register_buffer(
+#             'global_merged_prompt',
+#             torch.zeros(depth * 2, emb_d)
+#         )
+
+#     def create_prompt_with_init(a, b, c=None, ortho=False, mean=None, std=None, init_ref=None):
+#         if c is None:
+#             p = torch.nn.Parameter(torch.FloatTensor(a,b), requires_grad=True)
+#         else:
+#             p = torch.nn.Parameter(torch.FloatTensor(a,b,c), requires_grad=True)
+        
+#         if ortho:
+#             nn.init.orthogonal_(p)
+#         elif init_ref is not None:
+#             p = torch.nn.Parameter(init_ref.squeeze(dim=0).expand(a, b),  requires_grad=True)
+#         elif mean and std:
+#             nn.init.normal_(p, mean=mean, std=std)
+#         else:
+#             nn.init.uniform_(p)
+#         return p
+
+
+
+#     def merge_prompt(self, prompt1, prompt2):
+#         print("Merging prompt ... ")
+#         return prompt1 * self.ema_coeff + prompt2 * (1 - self.ema_coeff)
+
+#     # def process_task_count(self):
+#     #     self.task_count += 1
+
+#     def process_task_count(self):
+#         if self.task_count == 0:
+#             self.global_merged_prompt.copy_(self.prompt_tokens.detach())
+#         else:
+#             merged = self.merge_prompt(
+#                 self.global_merged_prompt,
+#                 self.prompt_tokens.detach()
+#             )
+#             self.global_merged_prompt.copy_(merged)
+
+#         self.task_count += 1
+
+#     def forward(self, l, x_block, train=False):
+#         B, N, C = x_block.shape
+
+#         prompt_bank = self.prompt_tokens if (train or not self.merge_flag) else self.global_merged_prompt
+
+#         pk = prompt_bank[l * 2:l * 2 + 1].reshape(1, self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+#         pv = prompt_bank[l * 2 + 1:l * 2 + 2].reshape(1, self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+
+#         # N includes cls token, so the rest length is N-1
+#         zero_pad = torch.zeros(B, self.num_heads, N - 1, self.head_dim,
+#                                device=x_block.device, dtype=x_block.dtype)
+
+#         pk = torch.cat([pk, zero_pad], dim=2)
+#         pv = torch.cat([pv, zero_pad], dim=2)
+
+#         return [pk, pv], 0, x_block
+
+
+class APT(nn.Module):
+    def __init__(self, emb_d, n_tasks, prompt_param, ema_coeff, depth, num_heads):
+        super().__init__()
+        self.task_count = 0
+        self.emb_d = emb_d
+        self.n_tasks = n_tasks
+        self.depth = depth
+        self.num_heads = num_heads
+        self.head_dim = emb_d // num_heads
+
+        self._init_smart(prompt_param)
+        self.merge_flag = True
+        self.ema_coeff = ema_coeff
+
+        self.prompt_tokens = create_prompt_with_init(self.depth * 2, emb_d)
+
+        global_merged_prompt = torch.zeros(self.depth * 2, emb_d)
+        self.register_buffer('global_merged_prompt', global_merged_prompt.clone().detach())
+
+        trunc_normal_(self.prompt_tokens, std=0.02)
+
+        for i in range(self.depth):
+            setattr(self, f'k_layer_proj{i}', nn.Linear(2, 2))
+            setattr(self, f'v_layer_proj{i}', nn.Linear(2, 2))
+
+    def merge_prompt(self, prompt1, prompt2):
+        print("Merging prompt ... ")
+        return prompt1 * self.ema_coeff + prompt2 * (1 - self.ema_coeff)
+
+    def _init_smart(self, prompt_param):
+        self.prompt_dropout_ratio = float(prompt_param[0])
+        self.prompt_dropout = nn.Dropout(self.prompt_dropout_ratio)
+
+    def process_task_count(self):
+        self.task_count += 1
+
+    def forward(self, l, x_block, train=False):
+        B, N, _ = x_block.shape
+        num_patch_tokens = N - 1
+
+        prompt_groups = self.prompt_tokens
+
+        if train or not self.merge_flag:
+            P_root_k = prompt_groups[l * 2:l * 2 + 1].reshape(self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+            P_root_v = prompt_groups[l * 2 + 1:l * 2 + 2].reshape(self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+        elif not train and self.merge_flag:
+            P_root_k = self.global_merged_prompt[l * 2:l * 2 + 1].reshape(self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+            P_root_v = self.global_merged_prompt[l * 2 + 1:l * 2 + 2].reshape(self.num_heads, 1, self.head_dim).expand(B, self.num_heads, 1, self.head_dim)
+        else:
+            raise ValueError("merge flag and mode err")
+
+        P_k = torch.cat(
+            (P_root_k, torch.zeros((B, self.num_heads, num_patch_tokens, self.head_dim), device=x_block.device, dtype=x_block.dtype)),
+            dim=-2
+        )
+        P_v = torch.cat(
+            (P_root_v, torch.zeros((B, self.num_heads, num_patch_tokens, self.head_dim), device=x_block.device, dtype=x_block.dtype)),
+            dim=-2
+        )
+
+        P = [P_k, P_v]
+        return P
+
+# note - ortho init has not been found to help l2p/dual prompt
+def create_prompt_with_init(a, b, c=None, ortho=False, mean=None, std=None, init_ref=None):
+    if c is None:
+        p = torch.nn.Parameter(torch.FloatTensor(a,b), requires_grad=True)
+    else:
+        p = torch.nn.Parameter(torch.FloatTensor(a,b,c), requires_grad=True)
+    
+    if ortho:
+        nn.init.orthogonal_(p)
+    elif init_ref is not None:
+        p = torch.nn.Parameter(init_ref.squeeze(dim=0).expand(a, b),  requires_grad=True)
+    elif mean and std:
+        nn.init.normal_(p, mean=mean, std=std)
+    else:
+        nn.init.uniform_(p)
+    return p
+
+
+
 class ViTZoo(nn.Module):
     def __init__(self, num_classes=10, pt=False, prompt_flag=False, prompt_param=None, vit_model=None, shared_para=None, t_or_s=None):
         super(ViTZoo, self).__init__()
@@ -638,6 +800,19 @@ class ViTZoo(nn.Module):
         self.last = nn.Linear(embed_dim, num_classes)
         self.kd_last = nn.Linear(embed_dim, num_classes)
 
+        self.clf_norm = nn.LayerNorm(embed_dim)
+        self.kd_cls_norm = nn.LayerNorm(embed_dim)
+        # if self.prompt_flag == 'apt':
+        #     self.clf_norm = nn.LayerNorm(embed_dim)
+        #     if self.shared_para['KD_method'] == 'KD_Token':
+        #         self.KD_cls_norm = nn.LayerNorm(embed_dim)
+        #     else:
+        #         self.KD_cls_norm = None
+        # else:
+        #     self.clf_norm = None
+        #     self.KD_cls_norm = None
+
+
         # create prompting module, the teacher model used the prompt with same dimension of student model 
         if self.prompt_flag == 'l2p':
             self.prompt = L2P(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
@@ -645,6 +820,15 @@ class ViTZoo(nn.Module):
             self.prompt = DualPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
         elif self.prompt_flag == 'coda':
             self.prompt = CodaPrompt(embed_dim, prompt_param[0], prompt_param[1], self.shared_para['s_embed_dim'])
+        elif self.prompt_flag == 'apt':
+            self.prompt = APT(
+                emb_d=embed_dim,
+                n_tasks=prompt_param[0],
+                prompt_param=prompt_param[1],
+                ema_coeff=self.shared_para['ema_coeff'],
+                depth=depth,
+                num_heads=num_heads
+            )
         else:
             self.prompt = None
 
@@ -656,6 +840,39 @@ class ViTZoo(nn.Module):
         # Set feature encoder
         self.feat = zoo_model
         self.s_feat = s_zoo_model
+
+        # if self.prompt_flag == 'apt':
+        #     for _, param in self.named_parameters():
+        #         param.requires_grad = False
+
+        #     for param in self.prompt.parameters():
+        #         param.requires_grad = True
+
+        #     for param in self.last.parameters():
+        #         param.requires_grad = True
+
+        #     for param in self.clf_norm.parameters():
+        #         param.requires_grad = True
+
+        #     if self.t_or_s == 1:
+        #         if self.shared_para['KD_method'] == 'KD_Token':
+        #             for param in self.kd_prompt.parameters():
+        #                 param.requires_grad = True
+        #             for param in self.kd_last.parameters():
+        #                 param.requires_grad = True
+        #             for param in self.KD_cls_norm.parameters():
+        #                 param.requires_grad = True
+        #         elif self.shared_para['KD_method'] == 'FitNets':
+        #             for param in self.project_t_s.parameters():
+        #                 param.requires_grad = True
+        #         elif self.shared_para['KD_method'] == 'ReviewKD':
+        #             for param in self.ReviewKD_layers.parameters():
+        #                 param.requires_grad = True
+
+
+
+        self.feat.prompt_flag = self.prompt_flag
+        self.s_feat.prompt_flag = self.prompt_flag
 
     # hcl in ReviewKD method
     def hcl(self, fstudent, fteacher):
@@ -675,6 +892,23 @@ class ViTZoo(nn.Module):
 
         return K_list, A_list, P_list
 
+    def apt_head(self, x):
+        x = self.clf_norm(x)
+        wt_norm = F.normalize(self.last.weight, p=2, dim=1)
+        x = torch.matmul(x, wt_norm.t())
+        if self.last.bias is not None:
+            x = x + self.last.bias
+        return x
+
+    def apt_kd_head(self, x):
+        x = self.kd_cls_norm(x)
+        wt_norm = F.normalize(self.kd_last.weight, p=2, dim=1)
+        x = torch.matmul(x, wt_norm.t())
+        if self.kd_last.bias is not None:
+            x = x + self.kd_last.bias
+        return x
+
+
     # pen: get penultimate features    
     def forward(self, x, pen=False, train=False, t_p_list_=None, t_corr_list_=None, t_features_list_=None):
 
@@ -686,10 +920,24 @@ class ViTZoo(nn.Module):
                 q = q[:,0,:]            
             
             if(self.t_or_s==0):
-                out, prompt_loss, p_list_, t_corr_list, t_features_list = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, KD_method=self.shared_para['KD_method'])
-                out = out[:,0,:]
+                # out, prompt_loss, p_list_, t_corr_list, t_features_list = self.feat(x, prompt=self.prompt, q=q, train=train, task_id=self.task_id, KD_method=self.shared_para['KD_method'])
+                # out = out[:,0,:]
+                # out = out.view(out.size(0), -1)
+                # out = self.last(out)
+
+                out, prompt_loss, p_list_, t_corr_list, t_features_list = self.feat(
+                    x, prompt=self.prompt, q=q, train=train, task_id=self.task_id,
+                    KD_method=self.shared_para['KD_method']
+                )
+                out = out[:, 0, :]
                 out = out.view(out.size(0), -1)
-                out = self.last(out)
+
+                if self.prompt_flag == 'apt':
+                    out = self.apt_head(out)
+                else:
+                    out = self.last(out)
+
+
                 if self.prompt is not None and train:
                     return out, prompt_loss, p_list_, t_corr_list, t_features_list
                 else:
@@ -700,26 +948,66 @@ class ViTZoo(nn.Module):
                 out, prompt_loss, prompt_loss_, s_features_list= self.feat(x, prompt=self.prompt, kd_prompt=self.kd_prompt, q=q, train=train, task_id=self.task_id, t_p_list_ = t_p_list_, t_corr_list_=t_corr_list_, KD_method=self.shared_para['KD_method'])
                 
                 try:
-                    if self.shared_para['KD_method'] == 'KD_Token' :
+                    # if self.shared_para['KD_method'] == 'KD_Token' :
 
-                        kd_out = out[:,-1,:]
-                        ori_out = out[:,0,:]
+                    #     kd_out = out[:,-1,:]
+                    #     ori_out = out[:,0,:]
+                    #     kd_out = kd_out.view(kd_out.size(0), -1)
+                    #     ori_out = ori_out.view(ori_out.size(0), -1)
+
+                    #     ori_out = self.last(ori_out)
+                    #     kd_out = self.kd_last(kd_out)
+
+                    #     total_out = (1-self.shared_para['kd_alpha'])*ori_out + self.shared_para['kd_alpha']*kd_out
+
+
+
+
+                    if self.shared_para['KD_method'] == 'KD_Token':
+                        kd_out = out[:, -1, :]
+                        ori_out = out[:, 0, :]
+
                         kd_out = kd_out.view(kd_out.size(0), -1)
                         ori_out = ori_out.view(ori_out.size(0), -1)
 
-                        ori_out = self.last(ori_out)
-                        kd_out = self.kd_last(kd_out)
+                        if self.prompt_flag == 'apt':
+                            ori_out = self.apt_head(ori_out)
+                            kd_out = self.apt_kd_head(kd_out)
+                        else:
+                            ori_out = self.last(ori_out)
+                            kd_out = self.kd_last(kd_out)
 
-                        total_out = (1-self.shared_para['kd_alpha'])*ori_out + self.shared_para['kd_alpha']*kd_out
+                        total_out = (1 - self.shared_para['kd_alpha']) * ori_out + self.shared_para['kd_alpha'] * kd_out
+                        #total_out = ori_out
+
+
+
+
+
 
                     elif self.shared_para['KD_method'] == 'KD' or self.shared_para['KD_method'] == 'DKD' or self.shared_para['KD_method'] == 'FitNets' or self.shared_para['KD_method'] == 'ReviewKD' :
-                        ori_out = out[:,0,:]
-                        ori_out = ori_out.view(ori_out.size(0), -1)
+                        # ori_out = out[:,0,:]
+                        # ori_out = ori_out.view(ori_out.size(0), -1)
                         
-                        ori_out = self.last(ori_out)
-                        kd_out = None
+                        # ori_out = self.last(ori_out)
+                        # kd_out = None
 
+                        # total_out = ori_out
+
+                        ori_out = out[:, 0, :]
+                        ori_out = ori_out.view(ori_out.size(0), -1)
+
+                        if self.prompt_flag == 'apt':
+                            ori_out = self.apt_head(ori_out)
+                        else:
+                            ori_out = self.last(ori_out)
+
+                        kd_out = None
                         total_out = ori_out
+
+
+
+                        
                 except ValueError as e:
                     print(e)
                     sys.exit(1)  # End the program if an invalid value is found
