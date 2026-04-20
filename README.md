@@ -1,6 +1,6 @@
 ##  Continual Distillation Learning
 PyTorch code for the paper:\
-**Continual Distillation Learning: Knowledge Distillation in Prompt-based Continual Learning**\
+**Decoupled Prompting for Continual Distillation in Rehearsal-Free Class-Incremental Learning**\
 Qifan Zhang, Yunhui Guo, Yu Xiang
 
 [arXiv](https://arxiv.org/abs/2407.13911), [Project](https://irvlutd.github.io/CDL/)
