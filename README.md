@@ -10,7 +10,7 @@ Qifan Zhang, Yunhui Guo, Yu Xiang
 </p>
 
 ## Abstract
-We introduce the problem of continual distillation learning (CDL) in order to use knowledge distillation (KD) to improve prompt-based continual learning (CL) models. The CDL problem is valuable to study since the use of a larger vision transformer (ViT) leads to better performance in prompt-based continual learning. The distillation of knowledge from a large ViT to a small ViT can improve the inference efficiency for prompt-based CL models. We empirically found that existing KD methods such as logit distillation and feature distillation cannot effectively improve the student model in the CDL setup. To this end, we introduce a novel method named Knowledge Distillation based on Prompts (KDP), in which globally accessible prompts specifically designed for knowledge distillation are inserted into the frozen ViT backbone of the student model. We demonstrate that our KDP method effectively enhances the distillation performance in comparison to existing KD methods in the CDL setup.
+Prompt-based continual learning has shown strong performance in rehearsal-free class-incremental learning by adapting learnable prompts while freezing a pre-trained Vision Transformer (ViT) backbone. However, the effect of backbone scale remains underexplored. We observe that larger ViT backbones consistently yield better continual learning performance, which motivates us to study how to transfer such capability from a larger model to a smaller one. In this paper, we introduce Continual Distillation Learning (CDL), a new setting for knowledge distillation in rehearsal-free prompt-based continual learning. We show that conventional distillation methods provide only limited gains in CDL, mainly because task-specific prompts are forced to encode both continual adaptation and distillation knowledge, while lacking a persistent mechanism for cross-task knowledge transfer. To address this problem, we propose Decoupled Continual Distillation Learning (D-CDL), which introduces persistent Knowledge-Distillation prompts (KD-prompts) and a dedicated KD branch to explicitly decouple distillation from task adaptation. The proposed KD-prompts are propagated across tasks as a global carrier of teacher knowledge, while the original prompts remain responsible for continual learning. D-CDL is simple, general, and can be integrated into various prompt-based continual learning frameworks. Extensive experiments on Split CIFAR-100 and Split ImageNet-R across four representative continual learning methods show that D-CDL consistently outperforms existing distillation baselines and substantially improves student performance under different teacher-student settings.
 
 
 ## Setup
@@ -54,10 +54,10 @@ python -u run.py --config configs/imnet-r_prompt.yaml --gpuid 0 1 \
 ```
 * Check the experiments/imagenet-r.sh and experiments/cifar-100.sh to see the details.
 * You can change the learner_name for DualPrompt or L2P.
-* Change the prompt_param for different learner(CODA, DualPrompt or L2P)
+* Change the prompt_param for different learner(CODA, DualPrompt, L2P or APT)
 * You can adjust the teacher and student's model with --t_model and --s_model.
-* Change the --KD_method for different knowledage distillation methods -> ['KD_Token', 'KD', 'DKD', 'FitNets', 'ReviewKD']. Use the 'KD_Token' for our ***KDP*** model.
-* Change the --kd_prompt_param for our ***KDP*** model (kd_layers size, kd_prompt_length).
+* Change the --KD_method for different knowledage distillation methods -> ['KD_Token', 'KD', 'DKD', 'FitNets', 'ReviewKD']. Use the 'KD_Token' for our ***DCDL*** model.
+* Change the --kd_prompt_param for our ***CDL*** model (kd_layers size, kd_prompt_length).
 
 
 ## Results
